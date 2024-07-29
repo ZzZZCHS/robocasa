@@ -272,7 +272,7 @@ def get_ds_path(task, ds_type, return_info=False):
     elif ds_type == "human_im":
         folder = ds_config["human_path"]
         if task in SINGLE_STAGE_TASK_DATASETS:
-            fname = "demo_gentex_im128_randcams.hdf5"
+            fname = "demo_gentex_im128_randcams_addmask.hdf5"
         elif task in MULTI_STAGE_TASK_DATASETS:
             fname = "demo_gentex_im128.hdf5"
     else:
