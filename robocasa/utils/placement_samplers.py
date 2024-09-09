@@ -489,10 +489,13 @@ class SequentialCompositeSampler(ObjectPositionSampler):
         """
         # Standardize inputs
         placed_objects = {} if placed_objects is None else copy(placed_objects)
+        placed_names = set(placed_objects.keys())
 
         # Iterate through all samplers to sample
         for sampler, s_args in zip(self.samplers.values(), self.sample_args.values()):
             # Pre-process sampler args
+            if sampler.name.split('_Sampler')[0] in placed_objects:
+                continue
             if s_args is None:
                 s_args = {}
             for arg_name, arg in zip(("reference", "on_top"), (reference, on_top)):
@@ -504,7 +507,7 @@ class SequentialCompositeSampler(ObjectPositionSampler):
             placed_objects.update(new_placements)
         
         # only return placements for newly placed objects
-        sampled_obj_names = [obj.name for sampler in self.samplers.values() for obj in sampler.mujoco_objects]
+        sampled_obj_names = [obj.name for sampler in self.samplers.values() for obj in sampler.mujoco_objects if obj.name not in placed_names]
         return {k: v for (k, v) in placed_objects.items() if k in sampled_obj_names}
 
 

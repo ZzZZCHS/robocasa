@@ -164,10 +164,12 @@ class Kitchen(ManipulationEnv):
             seed=seed,
         )
 
-    def _load_model(self):
+    def _load_model(self, retry_time=0):
         """
         Loads an xml model, puts it in self.model
         """
+        if retry_time > 5:
+            raise RandomizationError
         super()._load_model()
 
         # determine sample layout and style
@@ -275,6 +277,7 @@ class Kitchen(ManipulationEnv):
                 freezable=cfg.get("freezable", None),
                 max_size=cfg.get("max_size", (None, None, None)),
                 object_scale=cfg.get("object_scale", None),
+                ori_info=cfg.get('info', None)
             )
             if "name" not in cfg:
                 cfg["name"] = "obj_{}".format(obj_num+1)
@@ -290,14 +293,14 @@ class Kitchen(ManipulationEnv):
         # add objects
         self.objects = {}
         if "object_cfgs" in self._ep_meta:
-            self.object_cfgs = self._ep_meta["object_cfgs"]
+            self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
             for obj_num, cfg in enumerate(self.object_cfgs):
                 model, info = _create_obj(cfg)
                 cfg["info"] = info
                 self.objects[model.name] = model
                 self.model.merge_objects([model])
         else:
-            self.object_cfgs = self._get_obj_cfgs()
+            self.object_cfgs = self._get_obj_cfgs() + self._get_more_obj_cfgs()
             addl_obj_cfgs = []
             for obj_num, cfg in enumerate(self.object_cfgs):
                 cfg["type"] = "object"
@@ -346,6 +349,7 @@ class Kitchen(ManipulationEnv):
 
             # # remove objects that didn't get created
             # self.object_cfgs = [cfg for cfg in self.object_cfgs if "model" in cfg]
+        
         self.placement_initializer = self._get_placement_initializer(self.object_cfgs)
 
         object_placements = None
@@ -356,12 +360,11 @@ class Kitchen(ManipulationEnv):
                 if macros.VERBOSE:
                     print("Ranomization error in initial placement. Try #{}".format(i))
                 continue
-            
             break
         if object_placements is None:
             if macros.VERBOSE:
-                print("Could not place objects. Trying again with self._load_model()")
-            self._load_model()
+                print(f"Could not place objects. Trying again with self._load_model(). Try #{retry_time}")
+            self._load_model(retry_time+1)
             return
         self.object_placements = object_placements
 
@@ -443,7 +446,6 @@ class Kitchen(ManipulationEnv):
                 mj_obj = self.objects[cfg["name"]]
             else:
                 raise ValueError
-
             placement = cfg.get("placement", None)
             if placement is None:
                 continue
@@ -608,6 +610,9 @@ class Kitchen(ManipulationEnv):
             policy_step = False
     
     def _get_obj_cfgs(self):
+        return []
+    
+    def _get_more_obj_cfgs(self):
         return []
     
     def get_ep_meta(self):
@@ -778,6 +783,7 @@ class Kitchen(ManipulationEnv):
         self.obj_body_id = {}
         for (name, model) in self.objects.items():
             self.obj_body_id[name] = self.sim.model.body_name2id(model.root_body)
+            
         
     def _setup_observables(self):
         """
@@ -947,7 +953,7 @@ class Kitchen(ManipulationEnv):
         self, groups, exclude_groups=None,
         graspable=None, microwavable=None, washable=None, cookable=None, freezable=None,
         split=None, obj_registries=None,
-        max_size=(None, None, None), object_scale=None,
+        max_size=(None, None, None), object_scale=None, ori_info=None
     ):        
         return sample_kitchen_object(
             groups,
@@ -962,6 +968,7 @@ class Kitchen(ManipulationEnv):
             split=(split or self.obj_instance_split),
             max_size=max_size,
             object_scale=object_scale,
+            ori_info=ori_info
         )
     
     def _is_fxtr_valid(self, fxtr, size):

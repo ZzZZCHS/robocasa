@@ -1563,6 +1563,7 @@ def sample_kitchen_object(
     split=None,
     max_size=(None, None, None),
     object_scale=None,
+    ori_info=None
 ):
     valid_object_sampled = False
     while valid_object_sampled is False:
@@ -1578,6 +1579,7 @@ def sample_kitchen_object(
             obj_registries=obj_registries,
             split=split,
             object_scale=object_scale,
+            ori_info=ori_info
         )
         
         # check if object size is within bounds
@@ -1609,7 +1611,20 @@ def sample_kitchen_object_helper(
     obj_registries=("objaverse",),
     split=None,
     object_scale=None,
+    ori_info=None
 ):
+    if ori_info is not None:
+        cat = ori_info['cat']
+        mjcf_path = ori_info['mjcf_path']
+        mjcf_path = os.path.join(BASE_ASSET_ZOO_PATH, '/'.join(mjcf_path.split('/')[-4:]))
+        chosen_reg = mjcf_path.split('/')[-4]
+        mjcf_kwargs = OBJ_CATEGORIES[cat][chosen_reg].get_mjcf_kwargs()
+        mjcf_kwargs['mjcf_path'] = mjcf_path
+        ori_info['mjcf_path'] = mjcf_path
+        if object_scale is not None:
+            mjcf_kwargs['scale'] *= object_scale
+        return mjcf_kwargs, ori_info
+        
     if rng is None:
         rng = np.random.default_rng()
 
@@ -1711,7 +1726,7 @@ def sample_kitchen_object_helper(
     
     if object_scale is not None:
         mjcf_kwargs["scale"] *= object_scale
-
+        
     groups_containing_sampled_obj = []
     for group, group_cats in OBJ_GROUPS.items():
         if cat in group_cats:

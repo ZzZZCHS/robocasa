@@ -176,12 +176,12 @@ def download_and_extract_zip(
 
 
 def download_kitchen_assets():
-    ans = input("The script will download ~5 Gb of data. Proceed? (y/n) ")
-    if ans == "y":
-        print("Proceeding...")
-    else:
-        print("Aborting.")
-        return
+    # ans = input("The script will download ~5 Gb of data. Proceed? (y/n) ")
+    # if ans == "y":
+    #     print("Proceeding...")
+    # else:
+    #     print("Aborting.")
+    #     return
 
     for ds_name, config in DOWNLOAD_ASSET_REGISTRY.items():
         if ds_name == "aigen_objs":

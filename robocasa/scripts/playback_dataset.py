@@ -246,8 +246,8 @@ def reset_to(env, state):
 
 def playback_dataset(args):
     # some arg checking
-    # write_video = True #(args.video_path is not None)
-    write_video = False
+    write_video = True #(args.video_path is not None)
+    # write_video = False
     if args.video_path is None:
         args.video_path = args.dataset.split(".hdf5")[0] + ".mp4"
         if args.use_actions:
@@ -288,7 +288,7 @@ def playback_dataset(args):
         env_kwargs = env_meta["env_kwargs"]
         env_kwargs["has_renderer"] = False
         env_kwargs["renderer"] = "mjviewer"
-        env_kwargs["has_offscreen_renderer"] = False #write_video
+        env_kwargs["has_offscreen_renderer"] = write_video
         env_kwargs["use_camera_obs"] = False
 
         if args.verbose:

@@ -139,3 +139,9 @@ robocasa/models/assets/textures
 
 # midjourney-generated textures
 robocasa/models/assets/generative_textures
+combined_views.png
+view_back.png
+view_front.png
+view_left.png
+view_right.png
+download_tmp.sh

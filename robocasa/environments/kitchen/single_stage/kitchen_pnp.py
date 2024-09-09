@@ -11,6 +11,7 @@ class PnP(Kitchen):
     ):
         self.obj_groups = obj_groups
         self.exclude_obj_groups = exclude_obj_groups
+        self.add_object_num = 0
 
         super().__init__(*args, **kwargs)
 
@@ -89,6 +90,28 @@ class PnPCounterToCab(PnP):
             ),
         ))
 
+        return cfgs
+    
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(dict(
+                name=f"distr_counter{i}",
+                type="object",
+                obj_groups="all",
+                placement=dict(
+                    fixture=self.counter,
+                    sample_region_kwargs=dict(
+                        ref=self.cab,
+                    ),
+                    size=(1.0, 0.30),
+                    pos=(0.0, 1.0),
+                    offset=(0.0, -0.05),
+                ),
+            ))
+        
         return cfgs
 
     def _check_success(self):
