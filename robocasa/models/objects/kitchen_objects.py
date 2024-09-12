@@ -1,15 +1,21 @@
 import numpy as np
+import torch
 from copy import deepcopy
 import pathlib
 import os
 import math
 import random
 import xml.etree.ElementTree as ET
+import json
+from collections import defaultdict
 
 from robosuite.utils.mjcf_utils import find_elements, string_to_array
 
 import robocasa
 BASE_ASSET_ZOO_PATH = os.path.join(robocasa.models.assets_root, "objects")
+
+ALL_OBJ_INFOS = json.load(open('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/all_infos.json', 'r'))
+OBJ_EMBEDDINGS = torch.load()
 
 
 OBJ_CATEGORIES = dict(
@@ -237,6 +243,9 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse=dict( 
             scale=0.8,
+            exclude=[
+                "cake_2"
+            ]
         )
     ),
     can=dict(
@@ -245,6 +254,7 @@ OBJ_CATEGORIES = dict(
         aigen=dict(),
         objaverse=dict( 
             exclude=[
+                "can_17",
                 "can_10", # hole on bottom
                 "can_5", # causing error: faces of mesh have inconsistent orientation.
             ],
@@ -1563,7 +1573,7 @@ def sample_kitchen_object(
     split=None,
     max_size=(None, None, None),
     object_scale=None,
-    ori_info=None
+    cfg=None
 ):
     valid_object_sampled = False
     while valid_object_sampled is False:
@@ -1579,7 +1589,7 @@ def sample_kitchen_object(
             obj_registries=obj_registries,
             split=split,
             object_scale=object_scale,
-            ori_info=ori_info
+            cfg=cfg
         )
         
         # check if object size is within bounds
@@ -1611,9 +1621,10 @@ def sample_kitchen_object_helper(
     obj_registries=("objaverse",),
     split=None,
     object_scale=None,
-    ori_info=None
+    cfg=None
 ):
-    if ori_info is not None:
+    if cfg and cfg.get('info', None):
+        ori_info = cfg['info']
         cat = ori_info['cat']
         mjcf_path = ori_info['mjcf_path']
         mjcf_path = os.path.join(BASE_ASSET_ZOO_PATH, '/'.join(mjcf_path.split('/')[-4:]))
@@ -1637,8 +1648,8 @@ def sample_kitchen_object_helper(
         obj_found = False
         for cand_cat in OBJ_CATEGORIES:
             for reg in obj_registries:
-                if reg in OBJ_CATEGORIES[cand_cat] and mjcf_path in OBJ_CATEGORIES[reg][cand_cat].mjcf_paths:
-                    mjcf_kwargs = OBJ_CATEGORIES[reg][cand_cat].get_mjcf_kwargs()
+                if reg in OBJ_CATEGORIES[cand_cat] and mjcf_path in OBJ_CATEGORIES[cand_cat][reg].mjcf_paths:
+                    mjcf_kwargs = OBJ_CATEGORIES[cand_cat][reg].get_mjcf_kwargs()
                     cat = cand_cat
                     obj_found = True
                     break
@@ -1697,23 +1708,71 @@ def sample_kitchen_object_helper(
                 valid_categories.append(cat)
 
         cat = rng.choice(valid_categories)
+                
         
         choices = {reg: [] for reg in obj_registries}
-
-        for reg in obj_registries:
-            if reg not in OBJ_CATEGORIES[cat]:
-                choices[reg] = []
-                continue
-            reg_choices = deepcopy(OBJ_CATEGORIES[cat][reg].mjcf_paths)
-            if split is not None:
-                split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 2)))
-                if split == "A":
-                    reg_choices = reg_choices[:split_th]
-                elif split == "B":
-                    reg_choices = reg_choices[split_th:]
-                else:
-                    raise ValueError
-            choices[reg] = reg_choices
+        
+        if cfg and cfg.get('target_obj_name', None):
+            target_obj_name = cfg['target_obj_name']
+            unique_attr = cfg['unique_attr']
+            for reg in obj_registries:
+                if reg not in OBJ_CATEGORIES[cat]:
+                    choices[reg] = []
+                    continue
+                tmp_choices = []
+                for cat in valid_categories:
+                    reg_choices = deepcopy(OBJ_CATEGORIES[cat][reg].mjcf_paths)
+                    if split is not None:
+                        split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 2)))
+                        if split == "A":
+                            reg_choices = reg_choices[:split_th]
+                        elif split == "B":
+                            reg_choices = reg_choices[split_th:]
+                        else:
+                            raise ValueError
+                    tmp_choices.extend(reg_choices)
+                    # breakpoint()
+                choice_map = {}
+                for path in tmp_choices:
+                    choice_map[path.split('/')[-2]] = path
+                target_obj_info = ALL_OBJ_INFOS['obj_infos'][target_obj_name]
+                unique_attr2objs = ALL_OBJ_INFOS[f"{unique_attr}2objs"]
+                unique_attrs = target_obj_info[unique_attr]
+                if type(unique_attrs) != list:
+                    unique_attrs = [unique_attrs]
+                for tmp_attr in unique_attrs:
+                    for obj_name in unique_attr2objs[tmp_attr]:
+                        if obj_name in choice_map:
+                            del choice_map[obj_name]
+                attr_list = ['class', 'color', 'shape', 'material']
+                attr_list.remove(unique_attr)
+                ct = defaultdict(int)
+                for attr in attr_list:
+                    tmp_attrs = target_obj_info[attr]
+                    if type(tmp_attrs) != list:
+                        tmp_attrs = [tmp_attrs]
+                    attr2objs = ALL_OBJ_INFOS[f"{attr}2objs"]
+                    for tmp_attr in tmp_attrs:
+                        for obj_name in attr2objs[tmp_attr]:
+                            if obj_name in choice_map:
+                                ct[obj_name] += 1
+                tmp_choices = sorted(ct.items(), key = lambda item: item[1])[-10:]
+                choices[reg] = list(map(lambda x: choice_map[x[0]], tmp_choices))  
+        else:
+            for reg in obj_registries:
+                if reg not in OBJ_CATEGORIES[cat]:
+                    choices[reg] = []
+                    continue
+                reg_choices = deepcopy(OBJ_CATEGORIES[cat][reg].mjcf_paths)
+                if split is not None:
+                    split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 2)))
+                    if split == "A":
+                        reg_choices = reg_choices[:split_th]
+                    elif split == "B":
+                        reg_choices = reg_choices[split_th:]
+                    else:
+                        raise ValueError
+                choices[reg] = reg_choices
         
         chosen_reg = random.choices(
             population=obj_registries,

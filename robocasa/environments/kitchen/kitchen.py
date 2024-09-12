@@ -133,7 +133,7 @@ class Kitchen(ManipulationEnv):
             robots = [robots]
         if robots[0] == "PandaMobile":
             initial_qpos=(-0.01612974, -1.03446714, -0.02397936, -2.27550888, 0.03932365, 1.51639493, 0.69615947),
-
+            
         super().__init__(
             robots=robots,
             env_configuration=env_configuration,
@@ -277,7 +277,7 @@ class Kitchen(ManipulationEnv):
                 freezable=cfg.get("freezable", None),
                 max_size=cfg.get("max_size", (None, None, None)),
                 object_scale=cfg.get("object_scale", None),
-                ori_info=cfg.get('info', None)
+                cfg=cfg
             )
             if "name" not in cfg:
                 cfg["name"] = "obj_{}".format(obj_num+1)
@@ -292,8 +292,12 @@ class Kitchen(ManipulationEnv):
         
         # add objects
         self.objects = {}
+        target_obj_name = None
+        # unique_attr = random.choice(['color', 'shape', 'material', 'class'])
+        unique_attr = 'material'
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
+            # make sure the first object is "obj"
             for obj_num, cfg in enumerate(self.object_cfgs):
                 model, info = _create_obj(cfg)
                 cfg["info"] = info
@@ -304,7 +308,12 @@ class Kitchen(ManipulationEnv):
             addl_obj_cfgs = []
             for obj_num, cfg in enumerate(self.object_cfgs):
                 cfg["type"] = "object"
+                if target_obj_name is not None:
+                    cfg['target_obj_name'] = target_obj_name
+                    cfg['unique_attr'] = unique_attr
                 model, info = _create_obj(cfg)
+                if obj_num == 0:
+                    target_obj_name = info['mjcf_path'].split('/')[-2]
                 cfg["info"] = info
                 self.objects[model.name] = model
                 self.model.merge_objects([model])
@@ -953,7 +962,7 @@ class Kitchen(ManipulationEnv):
         self, groups, exclude_groups=None,
         graspable=None, microwavable=None, washable=None, cookable=None, freezable=None,
         split=None, obj_registries=None,
-        max_size=(None, None, None), object_scale=None, ori_info=None
+        max_size=(None, None, None), object_scale=None, cfg=None
     ):        
         return sample_kitchen_object(
             groups,
@@ -968,7 +977,7 @@ class Kitchen(ManipulationEnv):
             split=(split or self.obj_instance_split),
             max_size=max_size,
             object_scale=object_scale,
-            ori_info=ori_info
+            cfg=cfg
         )
     
     def _is_fxtr_valid(self, fxtr, size):
