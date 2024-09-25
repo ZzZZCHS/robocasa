@@ -133,7 +133,7 @@ class PnPCounterToCab(PnP):
         for i in range(1, self.add_object_num+1):
             # distractors
             cfgs.append(dict(
-                name=f"distr_counter{i}",
+                name=f"new_distr_{i}",
                 type="object",
                 obj_groups="all",
                 placement=dict(

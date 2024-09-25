@@ -460,8 +460,6 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         # add objects
         self.objects = {}
         target_obj_name = self.target_obj_name
-        # unique_attr = random.choice(['color', 'shape', 'material', 'class']) if self.unique_attr is None else self.unique_attr
-        # unique_attr = 'material'
         unique_attr = self.unique_attr = random.choice(['color', 'shape', 'material', 'class'])
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
