@@ -2136,6 +2136,148 @@ OBJ_GROUPS["group1"] = ["apple", "carrot", "banana", "bowl", "can"]
 OBJ_GROUPS["container_set2"] = ["plate", "bowl"]
 
 
+class ObjCat:
+    """
+    Class that encapsulates data for an object category.
+
+    Args:
+        name (str): name of the object category
+
+        types (tuple) or (str): type(s)/categories the object belongs to. Examples include meat, sweets, fruit, etc.
+
+        model_folders (list): list of folders containing the MJCF models for the object category
+
+        exclude (list): list of model names to exclude
+
+        graspable (bool): whether the object is graspable
+
+        washable (bool): whether the object is washable
+
+        microwavable (bool): whether the object is microwavable
+
+        cookable (bool): whether the object is cookable
+
+        freezable (bool): whether the object is freezable
+
+        scale (float): scale of the object meshes/geoms
+
+        solimp (tuple): solimp values for the object meshes/geoms
+
+        solref (tuple): solref values for the object meshes/geoms
+
+        density (float): density of the object meshes/geoms
+
+        friction (tuple): friction values for the object meshes/geoms
+
+        priority: priority of the object
+
+        aigen_cat (bool): True if the object is an AI-generated object otherwise its an objaverse object
+    """
+
+    def __init__(
+        self,
+        name,
+        types,
+        model_folders=None,
+        exclude=None,
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        scale=1.0,
+        solimp=(0.998, 0.998, 0.001),
+        solref=(0.001, 2),
+        density=100,
+        friction=(0.95, 0.3, 0.1),
+        priority=None,
+        aigen_cat=False,
+    ):
+        self.name = name
+        if not isinstance(types, tuple):
+            types = (types,)
+        self.types = types
+
+        self.aigen_cat = aigen_cat
+
+        self.graspable = graspable
+        self.washable = washable
+        self.microwavable = microwavable
+        self.cookable = cookable
+        self.freezable = freezable
+
+        self.scale = scale
+        self.solimp = solimp
+        self.solref = solref
+        self.density = density
+        self.friction = friction
+        self.priority = priority
+        self.exclude = exclude or []
+
+        if model_folders is None:
+            subf = "aigen_objs" if self.aigen_cat else "objaverse"
+            model_folders = ["{}/{}".format(subf, name)]
+        cat_mjcf_paths = []
+        for folder in model_folders:
+            cat_path = os.path.join(BASE_ASSET_ZOO_PATH, folder)
+            for root, _, files in os.walk(cat_path):
+                if "model.xml" in files:
+                    model_name = os.path.basename(root)
+                    if model_name in self.exclude:
+                        continue
+                    cat_mjcf_paths.append(os.path.join(root, "model.xml"))
+        self.mjcf_paths = sorted(cat_mjcf_paths)
+
+    def get_mjcf_kwargs(self):
+        """
+        returns relevant data to apply to the MJCF model for the object category
+        """
+        return deepcopy(
+            dict(
+                scale=self.scale,
+                solimp=self.solimp,
+                solref=self.solref,
+                density=self.density,
+                friction=self.friction,
+                priority=self.priority,
+            )
+        )
+
+
+# update OBJ_CATEGORIES with ObjCat instances. Maps name to the different registries it can belong to
+# and then maps the registry to the ObjCat instance
+for (name, kwargs) in OBJ_CATEGORIES.items():
+
+    # get the properties that are common to both registries
+    common_properties = deepcopy(kwargs)
+    for k in common_properties.keys():
+        assert k in [
+            "graspable",
+            "washable",
+            "microwavable",
+            "cookable",
+            "freezable",
+            "types",
+            "aigen",
+            "objaverse",
+        ]
+    objaverse_kwargs = common_properties.pop("objaverse", None)
+    aigen_kwargs = common_properties.pop("aigen", None)
+    assert "scale" not in kwargs
+    OBJ_CATEGORIES[name] = {}
+
+    # create instances
+    if objaverse_kwargs is not None:
+        objaverse_kwargs.update(common_properties)
+        OBJ_CATEGORIES[name]["objaverse"] = ObjCat(name=name, **objaverse_kwargs)
+    if aigen_kwargs is not None:
+        aigen_kwargs.update(common_properties)
+        OBJ_CATEGORIES[name]["aigen"] = ObjCat(
+            name=name, aigen_cat=True, **aigen_kwargs
+        )
+
+
+
 def sample_kitchen_object(
     groups,
     exclude_groups=None,
