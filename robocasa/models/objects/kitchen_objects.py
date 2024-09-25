@@ -14,7 +14,18 @@ from robosuite.utils.mjcf_utils import find_elements, string_to_array
 import robocasa
 
 ALL_OBJ_INFOS = json.load(open('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/all_infos.json', 'r'))
-OBJ_EMBEDDINGS = torch.load()
+rank_info = torch.load('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/rank_info.pt', map_location='cpu')
+OBJ_NAME_LIST = rank_info['obj_name_list']
+ORI_RANK = rank_info['ori_rank']
+OBJ_SIM_MATRIX = rank_info['obj_sim_matrix']
+ATTR2IDX = {
+    'color': 0,
+    'shape': 1,
+    'material': 2,
+    'class': 3
+}
+CLASSNAME2IDX = {OBJ_NAME_LIST[idx]: idx for idx in range(len(OBJ_NAME_LIST))}
+
 
 BASE_ASSET_ZOO_PATH = os.path.join(robocasa.models.assets_root, "objects")
 
@@ -34,6 +45,9 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(
             model_folders=["objaverse/alcohol"],
             scale=1.35,
+            exclude=[
+                "alcohol_5",
+            ],
         ),
     ),
     apple=dict(
@@ -2543,20 +2557,43 @@ def sample_kitchen_object_helper(
                     for obj_name in unique_attr2objs[tmp_attr]:
                         if obj_name in choice_map:
                             del choice_map[obj_name]
-                attr_list = ['class', 'color', 'shape', 'material']
-                attr_list.remove(unique_attr)
-                ct = defaultdict(int)
-                for attr in attr_list:
-                    tmp_attrs = target_obj_info[attr]
-                    if type(tmp_attrs) != list:
-                        tmp_attrs = [tmp_attrs]
-                    attr2objs = ALL_OBJ_INFOS[f"{attr}2objs"]
-                    for tmp_attr in tmp_attrs:
-                        for obj_name in attr2objs[tmp_attr]:
-                            if obj_name in choice_map:
-                                ct[obj_name] += 1
-                tmp_choices = sorted(ct.items(), key = lambda item: item[1])[-10:]
-                choices[reg] = list(map(lambda x: choice_map[x[0]], tmp_choices))  
+                
+                # ORI_RANK (n_objs, n_objs, 5)
+                target_obj_ori_rank = ORI_RANK[CLASSNAME2IDX[target_obj_name]]
+                valid_obj_idx_list = []
+                for obj_name in choice_map.keys():
+                    valid_obj_idx_list.append(CLASSNAME2IDX[obj_name])
+                # breakpoint()
+                
+                # target_obj_sim = OBJ_SIM_MATRIX[CLASSNAME2IDX[target_obj_name]]
+                # target_obj_sim[:, ATTR2IDX[unique_attr]] = 1 - target_obj_sim[:, ATTR2IDX[unique_attr]]
+                # OBJ_SIM_MATRIX
+                
+                # attr_list = ['class', 'color', 'shape', 'material']
+                # attr_list.remove(unique_attr)
+                # remained_attr_idx_list = [ATTR2IDX[attr] for attr in attr_list]
+                # tmp_rank = target_obj_ori_rank[valid_obj_idx_list][:, remained_attr_idx_list]
+                
+                tmp_rank = target_obj_ori_rank[valid_obj_idx_list].to(torch.float32)
+                tmp_rank[:, ATTR2IDX[unique_attr]] *= -1
+                tmp_rank[:, ATTR2IDX[unique_attr]].clamp_min(-50)
+                
+                tmp_sum_rank = tmp_rank.sum(dim=-1)
+                tmp_rank_idx = tmp_sum_rank.argsort(dim=-1)
+                tmp_choices = [OBJ_NAME_LIST[valid_obj_idx_list[x]] for x in tmp_rank_idx[:30]]
+                choices[reg] = list(map(lambda x: choice_map[x], tmp_choices))
+                # ct = defaultdict(int)
+                # for attr in attr_list:
+                #     tmp_attrs = target_obj_info[attr]
+                #     if type(tmp_attrs) != list:
+                #         tmp_attrs = [tmp_attrs]
+                #     attr2objs = ALL_OBJ_INFOS[f"{attr}2objs"]
+                #     for tmp_attr in tmp_attrs:
+                #         for obj_name in attr2objs[tmp_attr]:
+                #             if obj_name in choice_map:
+                #                 ct[obj_name] += 1
+                # tmp_choices = sorted(ct.items(), key = lambda item: item[1])[-10:]
+                # choices[reg] = list(map(lambda x: choice_map[x[0]], tmp_choices))
         else:
             for reg in obj_registries:
                 if reg not in OBJ_CATEGORIES[cat]:
@@ -2573,10 +2610,11 @@ def sample_kitchen_object_helper(
                         raise ValueError
                 choices[reg] = reg_choices
         
-        chosen_reg = random.choices(
-            population=obj_registries,
-            weights=[len(choices[reg]) for reg in obj_registries]
-        )[0]
+        chosen_reg = rng.choice(
+            obj_registries,
+            p=np.array([len(choices[reg]) for reg in obj_registries])
+            / sum(len(choices[reg]) for reg in obj_registries),
+        )
             
         mjcf_path = rng.choice(choices[chosen_reg])
         mjcf_kwargs = OBJ_CATEGORIES[cat][chosen_reg].get_mjcf_kwargs()

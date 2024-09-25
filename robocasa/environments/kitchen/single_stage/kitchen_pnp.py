@@ -138,9 +138,9 @@ class PnPCounterToCab(PnP):
                 obj_groups="all",
                 placement=dict(
                     fixture=self.counter,
-                    sample_region_kwargs=dict(
-                        ref=self.cab,
-                    ),
+                    # sample_region_kwargs=dict(
+                    #     ref=self.cab,
+                    # ),
                     size=(1.0, 0.30),
                     pos=(0.0, 1.0),
                     offset=(0.0, -0.05),

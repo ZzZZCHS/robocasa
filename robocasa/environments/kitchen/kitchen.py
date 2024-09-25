@@ -226,7 +226,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         obj_instance_split=None,
         use_distractors=False,
         translucent_robot=False,
-        randomize_cameras=False,
+        randomize_cameras=False
     ):
         self.init_robot_base_pos = init_robot_base_pos
 
@@ -282,6 +282,10 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         self.use_object_obs = use_object_obs
         self.reward_scale = reward_scale
         self.reward_shaping = reward_shaping
+        
+        self.target_obj_name = None
+        self.unique_attr = None
+        self.no_placement = False
 
         super().__init__(
             robots=robots,
@@ -308,6 +312,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
             camera_heights=camera_heights,
             camera_widths=camera_widths,
             camera_depths=camera_depths,
+            camera_segmentations=None,
             renderer=renderer,
             renderer_config=renderer_config,
             seed=seed,
@@ -448,24 +453,27 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
             if "name" not in cfg:
                 cfg["name"] = "obj_{}".format(obj_num + 1)
             info = object_info
-
             object = MJCFObject(name=cfg["name"], **object_kwargs)
 
             return object, info
 
         # add objects
         self.objects = {}
-        target_obj_name = None
-        # unique_attr = random.choice(['color', 'shape', 'material', 'class'])
-        unique_attr = 'material'
+        target_obj_name = self.target_obj_name
+        # unique_attr = random.choice(['color', 'shape', 'material', 'class']) if self.unique_attr is None else self.unique_attr
+        # unique_attr = 'material'
+        unique_attr = self.unique_attr = random.choice(['color', 'shape', 'material', 'class'])
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
             # make sure the first object is "obj"
             for obj_num, cfg in enumerate(self.object_cfgs):
+                if target_obj_name is not None:
+                    cfg['target_obj_name'] = target_obj_name
+                    cfg['unique_attr'] = unique_attr
                 model, info = _create_obj(cfg)
                 cfg["info"] = info
                 self.objects[model.name] = model
-                self.model.merge_objects([model])
+                self.model.merge_objects([model], extend=True)
         else:
             self.object_cfgs = self._get_obj_cfgs() + self._get_more_obj_cfgs()
             addl_obj_cfgs = []
@@ -475,11 +483,11 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                     cfg['target_obj_name'] = target_obj_name
                     cfg['unique_attr'] = unique_attr
                 model, info = _create_obj(cfg)
-                if obj_num == 0:
+                if target_obj_name is None:
                     target_obj_name = info['mjcf_path'].split('/')[-2]
                 cfg["info"] = info
                 self.objects[model.name] = model
-                self.model.merge_objects([model])
+                self.model.merge_objects([model], extend=True)
 
                 try_to_place_in = cfg["placement"].get("try_to_place_in", None)
 
@@ -503,7 +511,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                     model, info = _create_obj(container_cfg)
                     container_cfg["info"] = info
                     self.objects[model.name] = model
-                    self.model.merge_objects([model])
+                    self.model.merge_objects([model], extend=True)
 
                     # modify object config to lie inside of container
                     cfg["placement"] = dict(
@@ -519,27 +527,29 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
 
             # # remove objects that didn't get created
             # self.object_cfgs = [cfg for cfg in self.object_cfgs if "model" in cfg]
+            
         
         self.placement_initializer = self._get_placement_initializer(self.object_cfgs)
 
-        object_placements = None
-        for i in range(1):
-            try:
-                object_placements = self.placement_initializer.sample(
-                    placed_objects=self.fxtr_placements
-                )
-            except RandomizationError as e:
-                if macros.VERBOSE:
-                    print("Ranomization error in initial placement. Try #{}".format(i))
-                continue
+        if not self.no_placement:
+            object_placements = None
+            for i in range(1):
+                try:
+                    object_placements = self.placement_initializer.sample(
+                        placed_objects=self.fxtr_placements
+                    )
+                except RandomizationError as e:
+                    if macros.VERBOSE:
+                        print("Ranomization error in initial placement. Try #{}".format(i))
+                    continue
 
-            break
-        if object_placements is None:
-            if macros.VERBOSE:
-                print(f"Could not place objects. Trying again with self._load_model(). Try #{retry_time}")
-            self._load_model(retry_time+1)
-            return
-        self.object_placements = object_placements
+                break
+            if object_placements is None:
+                if macros.VERBOSE:
+                    print(f"Could not place objects. Trying again with self._load_model(). Try #{retry_time}")
+                self._load_model(retry_time+1)
+                return
+            self.object_placements = object_placements
 
     def _setup_kitchen_references(self):
         """
