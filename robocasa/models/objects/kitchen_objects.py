@@ -2044,147 +2044,32 @@ OBJ_CATEGORIES = dict(
 )
 
 
-class ObjCat:
+def get_cats_by_type(types):
     """
-    Class that encapsulates data for an object category.
+    Retrieves a list of item keys from the global `OBJ_CATEGORIES` dictionary based on the specified types.
 
     Args:
-        name (str): name of the object category
+        types (list): A list of valid types to filter items by. Only items with a matching type will be included.
 
-        types (tuple) or (str): type(s)/categories the object belongs to. Examples include meat, sweets, fruit, etc.
-
-        model_folders (list): list of folders containing the MJCF models for the object category
-
-        exclude (list): list of model names to exclude
-
-        graspable (bool): whether the object is graspable
-
-        washable (bool): whether the object is washable
-
-        microwavable (bool): whether the object is microwavable
-
-        cookable (bool): whether the object is cookable
-
-        freezable (bool): whether the object is freezable
-
-        scale (float): scale of the object meshes/geoms
-
-        solimp (tuple): solimp values for the object meshes/geoms
-
-        solref (tuple): solref values for the object meshes/geoms
-
-        density (float): density of the object meshes/geoms
-
-        friction (tuple): friction values for the object meshes/geoms
-
-        priority: priority of the object
-
-        aigen_cat (bool): True if the object is an AI-generated object otherwise its an objaverse object
+    Returns:
+        list: A list of keys from `OBJ_CATEGORIES` where the item's types intersect with the provided `types`.
     """
+    types = set(types)
 
-    def __init__(
-        self,
-        name,
-        types,
-        model_folders=None,
-        exclude=None,
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        scale=1.0,
-        solimp=(0.998, 0.998, 0.001),
-        solref=(0.001, 2),
-        density=100,
-        friction=(0.95, 0.3, 0.1),
-        priority=None,
-        aigen_cat=False,
-    ):
-        self.name = name
-        if not isinstance(types, tuple):
-            types = (types,)
-        self.types = types
+    res = []
+    for key, val in OBJ_CATEGORIES.items():
+        cat_types = val["types"]
+        if isinstance(cat_types, str):
+            cat_types = [cat_types]
+        cat_types = set(cat_types)
+        # Access the "types" key in the dictionary using the correct syntax
+        if len(cat_types.intersection(types)) > 0:
+            res.append(key)
 
-        self.aigen_cat = aigen_cat
-
-        self.graspable = graspable
-        self.washable = washable
-        self.microwavable = microwavable
-        self.cookable = cookable
-        self.freezable = freezable
-
-        self.scale = scale
-        self.solimp = solimp
-        self.solref = solref
-        self.density = density
-        self.friction = friction
-        self.priority = priority
-        self.exclude = exclude or []
-
-        if model_folders is None:
-            subf = "aigen_objs" if self.aigen_cat else "objaverse"
-            model_folders = ["{}/{}".format(subf, name)]
-        cat_mjcf_paths = []
-        for folder in model_folders:
-            cat_path = os.path.join(BASE_ASSET_ZOO_PATH, folder)
-            for root, _, files in os.walk(cat_path):
-                if "model.xml" in files:
-                    model_name = os.path.basename(root)
-                    if model_name in self.exclude:
-                        continue
-                    cat_mjcf_paths.append(os.path.join(root, "model.xml"))
-        self.mjcf_paths = sorted(cat_mjcf_paths)
-
-    def get_mjcf_kwargs(self):
-        """
-        returns relevant data to apply to the MJCF model for the object category
-        """
-        return deepcopy(
-            dict(
-                scale=self.scale,
-                solimp=self.solimp,
-                solref=self.solref,
-                density=self.density,
-                friction=self.friction,
-                priority=self.priority,
-            )
-        )
+    return res
 
 
-# update OBJ_CATEGORIES with ObjCat instances. Maps name to the different registries it can belong to
-# and then maps the registry to the ObjCat instance
-for (name, kwargs) in OBJ_CATEGORIES.items():
-
-    # get the properties that are common to both registries
-    common_properties = deepcopy(kwargs)
-    for k in common_properties.keys():
-        assert k in [
-            "graspable",
-            "washable",
-            "microwavable",
-            "cookable",
-            "freezable",
-            "types",
-            "aigen",
-            "objaverse",
-        ]
-    objaverse_kwargs = common_properties.pop("objaverse", None)
-    aigen_kwargs = common_properties.pop("aigen", None)
-    assert "scale" not in kwargs
-    OBJ_CATEGORIES[name] = {}
-
-    # create instances
-    if objaverse_kwargs is not None:
-        objaverse_kwargs.update(common_properties)
-        OBJ_CATEGORIES[name]["objaverse"] = ObjCat(name=name, **objaverse_kwargs)
-    if aigen_kwargs is not None:
-        aigen_kwargs.update(common_properties)
-        OBJ_CATEGORIES[name]["aigen"] = ObjCat(
-            name=name, aigen_cat=True, **aigen_kwargs
-        )
-
-
+### define all object categories ###
 OBJ_GROUPS = dict(
     all=list(OBJ_CATEGORIES.keys()),
 )
@@ -2192,70 +2077,43 @@ OBJ_GROUPS = dict(
 for k in OBJ_CATEGORIES:
     OBJ_GROUPS[k] = [k]
 
-# OBJ_GROUPS["washable"] = [cat for (cat, cat_meta) in OBJ_CATEGORIES.items() if cat_meta.washable is True]
-# OBJ_GROUPS["graspable"] = [cat for (cat, cat_meta) in OBJ_CATEGORIES.items() if cat_meta.graspable is True]
-# OBJ_GROUPS["heatable"] = [cat for (cat, cat_meta) in OBJ_CATEGORIES.items() if cat_meta.heatable is True]
-
 all_types = set()
 # populate all_types
 for (cat, cat_meta_dict) in OBJ_CATEGORIES.items():
     # types are common to both so we only need to examine one
-    k = "objaverse" if "objaverse" in cat_meta_dict else "aigen"
-    all_types = all_types.union(cat_meta_dict[k].types)
+    cat_types = cat_meta_dict["types"]
+    if isinstance(cat_types, str):
+        cat_types = [cat_types]
+    all_types = all_types.union(cat_types)
 
 # populate OBJ_GROUPS which maps types to categories associated with the type
 for t in all_types:
-    cats = []
-    for (cat, cat_meta_dict) in OBJ_CATEGORIES.items():
-        k = "objaverse" if "objaverse" in cat_meta_dict else "aigen"
-        if t in cat_meta_dict[k].types:
-            cats.append(cat)
-    OBJ_GROUPS[t] = cats
+    OBJ_GROUPS[t] = get_cats_by_type(types=[t])
 
-food_groups = []
-container_groups = []
-
-# populate food and container groups
-for (cat, cat_meta_dict) in OBJ_CATEGORIES.items():
-    k = "objaverse" if "objaverse" in cat_meta_dict else "aigen"
-    cat_meta = cat_meta_dict[k]
-    if any(
-        [
-            t in cat_meta.types
-            for t in [
-                "vegetable",
-                "fruit",
-                "sweets",
-                "dairy",
-                "meat",
-                "bread_food",
-                "pastry",
-                "cooked_food",
-            ]
-        ]
-    ):
-        food_groups.append(cat)
-    if any(
-        [
-            t in cat_meta.types
-            for t in [
-                "vegetable",
-                "fruit",
-                "sweets",
-                "dairy",
-                "meat",
-                "bread_food",
-                "pastry",
-                "cooked_food",
-            ]
-        ]
-    ):
-        container_groups.append(cat)
-
-
-OBJ_GROUPS["food"] = food_groups
-# obj categories that can be placed in open receptacles
-OBJ_GROUPS["in_container"] = container_groups
+OBJ_GROUPS["food"] = get_cats_by_type(
+    [
+        "vegetable",
+        "fruit",
+        "sweets",
+        "dairy",
+        "meat",
+        "bread_food",
+        "pastry",
+        "cooked_food",
+    ]
+)
+OBJ_GROUPS["in_container"] = get_cats_by_type(
+    [
+        "vegetable",
+        "fruit",
+        "sweets",
+        "dairy",
+        "meat",
+        "bread_food",
+        "pastry",
+        "cooked_food",
+    ]
+)
 
 # custom groups
 OBJ_GROUPS["container"] = ["plate"]  # , "bowl"]
