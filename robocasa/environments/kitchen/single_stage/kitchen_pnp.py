@@ -264,6 +264,30 @@ class PnPCabToCounter(PnP):
         )
 
         return cfgs
+    
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(dict(
+                name=f"new_distr_{i}",
+                type="object",
+                obj_groups="all",
+                placement=dict(
+                    fixture=self.counter,
+                    # sample_region_kwargs=dict(
+                    #     ref=self.cab,
+                    # ),
+                    size=(1.0, 0.30),
+                    pos=(0.0, 1.0),
+                    offset=(0.0, -0.05),
+                ),
+            ))
+        
+        return cfgs
+
 
     def _check_success(self):
         """
@@ -375,6 +399,31 @@ class PnPCounterToSink(PnP):
         )
 
         return cfgs
+    
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    placement=dict(
+                        fixture=self.counter,
+                        # sample_region_kwargs=dict(
+                        #     ref=self.sink,
+                        #     loc="left_right",
+                        # ),
+                        size=(0.30, 0.30),
+                        pos=("ref", -1.0),
+                        offset=(0.0, 0.30),
+                    ),
+                )
+            )
+
+        return cfgs
+
 
     def _check_success(self):
         """
@@ -484,6 +533,30 @@ class PnPSinkToCounter(PnP):
                 ),
             )
         )
+
+        return cfgs
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    placement=dict(
+                        fixture=self.counter,
+                        sample_region_kwargs=dict(
+                            ref=self.sink,
+                            loc="left_right",
+                        ),
+                        size=(0.30, 0.30),
+                        pos=("ref", -1.0),
+                        offset=(0.0, 0.30),
+                    ),
+                )
+            )
 
         return cfgs
 
@@ -608,6 +681,29 @@ class PnPCounterToMicrowave(PnP):
         )
 
         return cfgs
+    
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    placement=dict(
+                        fixture=self.distr_counter,
+                        sample_region_kwargs=dict(
+                            ref=self.microwave,
+                        ),
+                        size=(0.30, 0.30),
+                        pos=("ref", 1.0),
+                    ),
+                )
+            )
+
+        return cfgs
+
 
     def _check_success(self):
         """
