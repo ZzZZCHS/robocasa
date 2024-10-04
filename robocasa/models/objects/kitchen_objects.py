@@ -2575,8 +2575,8 @@ def sample_kitchen_object_helper(
                 # tmp_rank = target_obj_ori_rank[valid_obj_idx_list][:, remained_attr_idx_list]
                 
                 tmp_rank = target_obj_ori_rank[valid_obj_idx_list].to(torch.float32)
-                tmp_rank[:, ATTR2IDX[unique_attr]] *= -1
-                tmp_rank[:, ATTR2IDX[unique_attr]].clamp_min(-50)
+                tmp_rank[:, ATTR2IDX[unique_attr]] *= -5
+                # tmp_rank[:, ATTR2IDX[unique_attr]].clamp_min(-50)
                 
                 tmp_sum_rank = tmp_rank.sum(dim=-1)
                 tmp_rank_idx = tmp_sum_rank.argsort(dim=-1)

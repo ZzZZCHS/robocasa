@@ -322,7 +322,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         """
         Loads an xml model, puts it in self.model
         """
-        if retry_time > 5:
+        if retry_time > 3:
             raise RandomizationError
         super()._load_model()
 
