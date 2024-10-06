@@ -18,6 +18,7 @@ class ManipulateDoor(Kitchen):
         self.door_id = door_id
         assert behavior in ["open", "close"]
         self.behavior = behavior
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -95,7 +96,7 @@ class ManipulateDoor(Kitchen):
 
         cfgs.append(
             dict(
-                name="door_obj",
+                name="door_obj", # 原来为door_obj
                 obj_groups="all",
                 graspable=True,
                 microwavable=(True if isinstance(self.door_fxtr, Microwave) else None),
@@ -129,6 +130,28 @@ class ManipulateDoor(Kitchen):
             )
 
         return cfgs
+    
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    # inside door
+                    placement=dict(
+                        fixture=self.door_fxtr,
+                        size=(0.30, 0.30),
+                        pos=(None, -1.0),
+                    ),
+                )
+            )
+
+        return cfgs
+
 
 
 class OpenDoor(ManipulateDoor):
