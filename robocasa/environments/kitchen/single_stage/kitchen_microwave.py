@@ -25,6 +25,8 @@ class MicrowavePressButton(Kitchen):
         self.microwave = self.get_fixture(FixtureType.MICROWAVE)
         if self.behavior == "turn_off":
             self.microwave._turned_on = True
+        self.target_obj_str = self.microwave.name
+        self.target_place_str = None
         self.init_robot_base_pos = self.microwave
 
     def get_ep_meta(self):
@@ -37,6 +39,8 @@ class MicrowavePressButton(Kitchen):
             ep_meta["lang"] = "press the start button on the microwave"
         elif self.behavior == "turn_off":
             ep_meta["lang"] = "press the stop button on the microwave"
+        self.target_obj_phrase = "microwave"
+        self.target_place_phrase = None
         return ep_meta
 
     def _get_obj_cfgs(self):

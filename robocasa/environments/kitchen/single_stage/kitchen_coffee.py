@@ -24,6 +24,11 @@ class PnPCoffee(Kitchen):
         super()._setup_kitchen_references()
         self.coffee_machine = self.get_fixture("coffee_machine")
         self.counter = self.get_fixture(FixtureType.COUNTER, ref=self.coffee_machine)
+        self.target_obj_str = "obj"
+        if self.behavior == "counter_to_machine":
+            self.target_place_str = self.coffee_machine.name
+        else:
+            self.target_place_str = self.counter.name
         self.init_robot_base_pos = self.coffee_machine
 
     def get_ep_meta(self):
@@ -40,10 +45,14 @@ class PnPCoffee(Kitchen):
             ep_meta[
                 "lang"
             ] = f"pick the {obj_lang} from the counter and place it under the coffee machine dispenser"
+            self.target_obj_phrase = f"{obj_lang}"
+            self.target_place_phrase = "coffee machine dispenser"
         elif self.behavior == "machine_to_counter":
             ep_meta[
                 "lang"
             ] = f"pick the {obj_lang} from under the coffee machine dispenser and place it on the counter"
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = "counter"
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -152,6 +161,7 @@ class CoffeePressButton(Kitchen):
     """
 
     def __init__(self, *args, **kwargs):
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -161,6 +171,8 @@ class CoffeePressButton(Kitchen):
         super()._setup_kitchen_references()
         self.coffee_machine = self.get_fixture("coffee_machine")
         self.counter = self.get_fixture(FixtureType.COUNTER, ref=self.coffee_machine)
+        self.target_obj_str = self.coffee_machine.name
+        self.target_place_str = None
         self.init_robot_base_pos = self.coffee_machine
 
     def get_ep_meta(self):
@@ -173,6 +185,8 @@ class CoffeePressButton(Kitchen):
         """
         ep_meta = super().get_ep_meta()
         ep_meta["lang"] = "press the button on the coffee machine to serve coffee"
+        self.target_obj_phrase = "coffee machine"
+        self.target_place_phrase = None
         return ep_meta
 
     def _get_obj_cfgs(self):

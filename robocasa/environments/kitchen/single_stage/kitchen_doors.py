@@ -27,6 +27,8 @@ class ManipulateDoor(Kitchen):
         """
         super()._setup_kitchen_references()
         self.door_fxtr = self.register_fixture_ref("door_fxtr", dict(id=self.door_id))
+        self.target_obj_str = self.door_fxtr.name
+        self.target_place_str = None
         self.init_robot_base_pos = self.door_fxtr
 
     def get_ep_meta(self):
@@ -51,6 +53,8 @@ class ManipulateDoor(Kitchen):
             door_fxtr_name = "drawer"
             door_name = "doors"
         ep_meta["lang"] = f"{self.behavior} the {door_fxtr_name} {door_name}"
+        self.target_obj_phrase = f"{door_fxtr_name} {door_name}"
+        self.target_place_phrase = None
         return ep_meta
 
     def _reset_internal(self):

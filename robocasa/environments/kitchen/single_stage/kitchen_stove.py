@@ -44,6 +44,8 @@ class ManipulateStoveKnob(Kitchen):
                 if self.rng.uniform() <= 0.50
                 else self.rng.choice(valid_knobs)
             )
+        self.target_obj_str = self.stove.name
+        self.target_place_str = None
         self.init_robot_base_pos = self.stove
 
     def get_ep_meta(self):
@@ -52,13 +54,13 @@ class ManipulateStoveKnob(Kitchen):
         This includes the language description of the task and the task references.
         """
         ep_meta = super().get_ep_meta()
-        ep_meta[
-            "lang"
-        ] = f"{self.behavior.replace('_', ' ')} the {self.knob.replace('_', ' ')} burner of the stove"
+        ep_meta["lang"] = f"{self.behavior.replace('_', ' ')} the {self.knob.replace('_', ' ')} burner of the stove"
         ep_meta["task_refs"] = dict(
             knob=self.knob,
             cookware_burner=self.cookware_burner,
         )
+        self.target_obj_phrase = "stove"
+        self.target_place_phrase = None
         return ep_meta
 
     def _reset_internal(self):

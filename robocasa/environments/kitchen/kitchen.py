@@ -286,6 +286,8 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         self.target_obj_name = None
         self.unique_attr = None
         self.no_placement = False
+        self.target_obj_str = "obj"
+        self.target_place_str = None
 
         super().__init__(
             robots=robots,
@@ -450,8 +452,8 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                 object_scale=cfg.get("object_scale", None),
                 cfg=cfg
             )
-            if "name" not in cfg:
-                cfg["name"] = "obj_{}".format(obj_num + 1)
+            # if "name" not in cfg:
+            #     cfg["name"] = "obj_{}".format(obj_num + 1)
             info = object_info
             object = MJCFObject(name=cfg["name"], **object_kwargs)
 
@@ -482,7 +484,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                     cfg['target_obj_name'] = target_obj_name
                     cfg['unique_attr'] = unique_attr
                 model, info = _create_obj(cfg)
-                if target_obj_name is None:
+                if target_obj_name is None and cfg['name'] == 'obj':
                     target_obj_name = info['mjcf_path'].split('/')[-2]
                 cfg["info"] = info
                 self.objects[model.name] = model
