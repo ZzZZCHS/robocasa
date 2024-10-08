@@ -14,6 +14,7 @@ class PnPCoffee(Kitchen):
 
     def __init__(self, behavior="machine_to_counter", *args, **kwargs):
         self.behavior = behavior
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -88,6 +89,27 @@ class PnPCoffee(Kitchen):
             raise NotImplementedError
 
         return cfgs
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    # inside drawer
+                    placement=dict(
+                        fixture=self.counter,
+                        size=(0.50, 0.50)
+                    ),
+                )
+            )
+
+        return cfgs
+
 
     def _check_success(self):
         """
@@ -175,6 +197,26 @@ class CoffeePressButton(Kitchen):
                 ),
             )
         )
+
+        return cfgs
+    
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    # inside drawer
+                    placement=dict(
+                        fixture=self.counter,
+                        size=(0.50, 0.50)
+                    ),
+                )
+            )
 
         return cfgs
 

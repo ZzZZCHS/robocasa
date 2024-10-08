@@ -14,6 +14,7 @@ class ManipulateSinkFaucet(Kitchen):
 
         assert behavior in ["turn_on", "turn_off"]
         self.behavior = behavior
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -89,6 +90,26 @@ class ManipulateSinkFaucet(Kitchen):
 
         return cfgs
 
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    placement=dict(
+                        fixture=self.sink,
+                        size=(0.50, 0.50),
+                        pos=(None, -1.0),
+                    ),
+                )
+            )
+
+        return cfgs
+
     def _check_success(self):
         """
         Check if the sink faucet manipulation task is successful.
@@ -127,6 +148,7 @@ class TurnSinkSpout(Kitchen):
     """
 
     def __init__(self, *args, **kwargs):
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -202,6 +224,26 @@ class TurnSinkSpout(Kitchen):
                 ),
             )
         )
+
+        return cfgs
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    placement=dict(
+                        fixture=self.sink,
+                        size=(0.50, 0.50),
+                        pos=(None, -1.0),
+                    ),
+                )
+            )
 
         return cfgs
 

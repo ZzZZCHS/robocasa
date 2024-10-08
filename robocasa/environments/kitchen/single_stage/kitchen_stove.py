@@ -16,6 +16,7 @@ class ManipulateStoveKnob(Kitchen):
         assert behavior in ["turn_on", "turn_off"]
         self.behavior = behavior
         self.knob_id = knob_id
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -25,6 +26,7 @@ class ManipulateStoveKnob(Kitchen):
         """
         super()._setup_kitchen_references()
         self.stove = self.get_fixture(FixtureType.STOVE)
+        # self.counter = self.get_fixture(FixtureType.COUNTER)
         if "task_refs" in self._ep_meta:
             self.knob = self._ep_meta["task_refs"]["knob"]
             self.cookware_burner = self._ep_meta["task_refs"]["cookware_burner"]
@@ -84,6 +86,7 @@ class ManipulateStoveKnob(Kitchen):
         """
         cfgs = []
 
+
         cfgs.append(
             dict(
                 name="cookware",
@@ -99,6 +102,36 @@ class ManipulateStoveKnob(Kitchen):
                 ),
             )
         )
+
+        cfgs.append(
+            dict(
+                name="cook_obj",
+                obj_groups="all",
+                type="object",
+                placement=dict(
+                    fixture=self.stove
+                ),
+            )
+        )
+
+
+        return cfgs
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    placement=dict(
+                        fixture=self.stove
+                    ),
+                )
+            )
 
         return cfgs
 

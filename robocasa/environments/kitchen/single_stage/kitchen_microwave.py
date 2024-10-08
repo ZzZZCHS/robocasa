@@ -13,6 +13,7 @@ class MicrowavePressButton(Kitchen):
     def __init__(self, behavior="turn_on", *args, **kwargs):
         assert behavior in ["turn_on", "turn_off"]
         self.behavior = behavior
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _setup_kitchen_references(self):
@@ -20,6 +21,7 @@ class MicrowavePressButton(Kitchen):
         Setup the kitchen references for the microwave tasks
         """
         super()._setup_kitchen_references()
+        self.counter = self.get_fixture(FixtureType.COUNTER)
         self.microwave = self.get_fixture(FixtureType.MICROWAVE)
         if self.behavior == "turn_off":
             self.microwave._turned_on = True
@@ -61,6 +63,25 @@ class MicrowavePressButton(Kitchen):
         )
 
         return cfgs
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    placement=dict(
+                        fixture=self.counter
+                    ),
+                )
+            )
+
+        return cfgs
+
 
     def _check_success(self):
         """

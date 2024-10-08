@@ -22,6 +22,7 @@ class ManipulateDrawer(Kitchen):
         self.drawer_id = drawer_id
         assert behavior in ["open", "close"]
         self.behavior = behavior
+        self.add_object_num = 0
         super().__init__(*args, **kwargs)
 
     def _load_model(self):
@@ -234,6 +235,26 @@ class OpenDrawer(ManipulateDrawer):
             )
 
         return cfgs
+    
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    # inside drawer
+                    placement=dict(
+                        fixture=self.drawer,
+                        size=(0.50, 0.50)
+                    ),
+                )
+            )
+
+        return cfgs
 
 
 class CloseDrawer(ManipulateDrawer):
@@ -284,6 +305,28 @@ class CloseDrawer(ManipulateDrawer):
                         size=(1.0, 0.50),
                         pos=(None, -1.0),
                         offset=(0.0, 0.10),
+                    ),
+                )
+            )
+
+        return cfgs
+
+    def _get_more_obj_cfgs(self):
+        cfgs = []
+
+        for i in range(1, self.add_object_num+1):
+            # distractors
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    # inside drawer
+                    placement=dict(
+                        fixture=self.drawer,
+                        size=(0.50, 0.50),
+                        pos=(None, -0.80),
+                        offset=(0, -self.drawer.size[1] * 0.75),
                     ),
                 )
             )
