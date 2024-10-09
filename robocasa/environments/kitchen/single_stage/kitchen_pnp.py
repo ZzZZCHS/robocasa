@@ -1077,18 +1077,32 @@ class PnPStoveToCounter(PnP):
 
     def _get_more_obj_cfgs(self):
         cfgs = []
+        # print(f"Add {self.add_object_num} new object to the scene.")
+
+        # for i in range(1, self.add_object_num+1):
+        #     cfgs.append(
+        #         dict(
+        #             name=f"new_pan_{i}",
+        #             obj_groups="pan",
+        #             type="object",
+        #             placement=dict(
+        #                 fixture=self.stove,
+        #                 ensure_object_boundary_in_range=False,
+        #             )
+        #         )
+        #     )
 
         for i in range(1, self.add_object_num+1):
             # distractors
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="all",
+                    obj_groups=self.obj_groups,
                     type="object",
                     placement=dict(
                         fixture=self.stove,
                         ensure_object_boundary_in_range=False,
-                        size=(0.3, 0.3),
+                        size=(0.4, 0.4),
                         rotation=[(-3 * np.pi / 8, -np.pi / 4), (np.pi / 4, 3 * np.pi / 8)],
                         try_to_place_in="pan",
                     ),

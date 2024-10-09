@@ -26,7 +26,7 @@ class ManipulateStoveKnob(Kitchen):
         """
         super()._setup_kitchen_references()
         self.stove = self.get_fixture(FixtureType.STOVE)
-        # self.counter = self.get_fixture(FixtureType.COUNTER)
+        self.counter = self.get_fixture(FixtureType.COUNTER)
         if "task_refs" in self._ep_meta:
             self.knob = self._ep_meta["task_refs"]["knob"]
             self.cookware_burner = self._ep_meta["task_refs"]["cookware_burner"]
@@ -105,18 +105,6 @@ class ManipulateStoveKnob(Kitchen):
             )
         )
 
-        cfgs.append(
-            dict(
-                name="cook_obj",
-                obj_groups="all",
-                type="object",
-                placement=dict(
-                    fixture=self.stove
-                ),
-            )
-        )
-
-
         return cfgs
 
     def _get_more_obj_cfgs(self):
@@ -130,7 +118,7 @@ class ManipulateStoveKnob(Kitchen):
                     obj_groups="all",
                     type="object",
                     placement=dict(
-                        fixture=self.stove
+                        fixture=self.counter
                     ),
                 )
             )
