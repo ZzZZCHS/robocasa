@@ -23,7 +23,7 @@ class ManipulateSinkFaucet(Kitchen):
         """
         super()._setup_kitchen_references()
         self.sink = self.get_fixture(FixtureType.SINK)
-        self.target_obj_str = self.sink.name
+        self.target_obj_str = self.sink.name + "_handle"
         self.target_place_str = None
         self.init_robot_base_pos = self.sink
 
@@ -34,7 +34,7 @@ class ManipulateSinkFaucet(Kitchen):
         """
         ep_meta = super().get_ep_meta()
         ep_meta["lang"] = f"{self.behavior.replace('_', ' ')} the sink faucet"
-        self.target_obj_phrase = "sink"
+        self.target_obj_phrase = "sink faucet"
         self.target_place_phrase = None
         return ep_meta
 
@@ -167,7 +167,7 @@ class TurnSinkSpout(Kitchen):
         else:
             self.behavior = self.rng.choice(["left", "right"])
             self.init_sink_mode = self.rng.choice(["on", "off"])
-        self.target_obj_str = self.sink.name
+        self.target_obj_str = self.sink.name + "_spout"
         self.target_place_str = None
         self.init_robot_base_pos = self.sink
 
@@ -178,7 +178,7 @@ class TurnSinkSpout(Kitchen):
         """
         ep_meta = super().get_ep_meta()
         ep_meta["lang"] = f"turn the sink spout to the {self.behavior}"
-        self.target_obj_phrase = "sink"
+        self.target_obj_phrase = "sink spout"
         self.target_place_phrase = None
         ep_meta["task_refs"] = dict(
             behavior=self.behavior,

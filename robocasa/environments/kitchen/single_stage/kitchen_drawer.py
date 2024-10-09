@@ -92,7 +92,8 @@ class ManipulateDrawer(Kitchen):
         """
         super()._setup_kitchen_references()
         self.drawer = self.register_fixture_ref("drawer", dict(id=self.drawer_id))
-        self.target_obj_str = self.drawer.name
+        # self.target_obj_str = self.drawer.name + "_door_trims"
+        self.target_obj_str = self.drawer.name + "_door_handle_main"
         self.target_place_str = None
         self.init_robot_base_pos = self.drawer
 
