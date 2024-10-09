@@ -49,6 +49,8 @@ class PnPCounterToCab(PnP):
         self.counter = self.register_fixture_ref(
             "counter", dict(id=FixtureType.COUNTER, ref=self.cab)
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = self.cab.name
         self.init_robot_base_pos = self.cab
 
     def get_ep_meta(self):
@@ -58,9 +60,9 @@ class PnPCounterToCab(PnP):
         """
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the counter and place it in the cabinet"
+        ep_meta["lang"] = f"pick the {obj_lang} from the counter and place it in the cabinet"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = "cabinet"
         return ep_meta
 
     def _reset_internal(self):
@@ -192,6 +194,8 @@ class PnPCabToCounter(PnP):
             "counter",
             dict(id=FixtureType.COUNTER, ref=self.cab),
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = self.counter.name
         self.init_robot_base_pos = self.cab
 
     def get_ep_meta(self):
@@ -201,9 +205,9 @@ class PnPCabToCounter(PnP):
         """
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the cabinet and place it on the counter"
+        ep_meta["lang"] = f"pick the {obj_lang} from the cabinet and place it on the counter"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = "counter"
         return ep_meta
 
     def _reset_internal(self):
@@ -325,6 +329,8 @@ class PnPCounterToSink(PnP):
             "counter",
             dict(id=FixtureType.COUNTER, ref=self.sink),
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = self.sink.name
         self.init_robot_base_pos = self.sink
 
     def get_ep_meta(self):
@@ -334,9 +340,9 @@ class PnPCounterToSink(PnP):
         """
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the counter and place it in the sink"
+        ep_meta["lang"] = f"pick the {obj_lang} from the counter and place it in the sink"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = "sink"
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -462,6 +468,8 @@ class PnPSinkToCounter(PnP):
             "counter",
             dict(id=FixtureType.COUNTER, ref=self.sink),
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = "container"
         self.init_robot_base_pos = self.sink
 
     def get_ep_meta(self):
@@ -472,9 +480,9 @@ class PnPSinkToCounter(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         cont_lang = self.get_obj_lang(obj_name="container")
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the sink and place it on the {cont_lang} located on the counter"
+        ep_meta["lang"] = f"pick the {obj_lang} from the sink and place it on the {cont_lang} located on the counter"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -599,6 +607,8 @@ class PnPCounterToMicrowave(PnP):
             "distr_counter",
             dict(id=FixtureType.COUNTER, ref=self.microwave),
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = self.microwave.name
         self.init_robot_base_pos = self.microwave
 
     def _reset_internal(self):
@@ -615,9 +625,9 @@ class PnPCounterToMicrowave(PnP):
         """
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the counter and place it in the microwave"
+        ep_meta["lang"] = f"pick the {obj_lang} from the counter and place it in the microwave"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = "microwave"
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -753,6 +763,8 @@ class PnPMicrowaveToCounter(PnP):
             "distr_counter",
             dict(id=FixtureType.COUNTER, ref=self.microwave),
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = "container"
         self.init_robot_base_pos = self.microwave
 
     def _reset_internal(self):
@@ -770,9 +782,9 @@ class PnPMicrowaveToCounter(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         cont_lang = self.get_obj_lang(obj_name="container")
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the microwave and place it on {cont_lang} located on the counter"
+        ep_meta["lang"] = f"pick the {obj_lang} from the microwave and place it on {cont_lang} located on the counter"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -885,6 +897,8 @@ class PnPCounterToStove(PnP):
         self.counter = self.register_fixture_ref(
             "counter", dict(id=FixtureType.COUNTER, ref=self.stove, size=[0.30, 0.40])
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = "container"
         self.init_robot_base_pos = self.stove
 
     def get_ep_meta(self):
@@ -895,9 +909,9 @@ class PnPCounterToStove(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         cont_lang = self.get_obj_lang(obj_name="container")
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the plate and place it in the {cont_lang}"
+        ep_meta["lang"] = f"pick the {obj_lang} from the plate and place it in the {cont_lang}"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -998,6 +1012,8 @@ class PnPStoveToCounter(PnP):
         self.counter = self.register_fixture_ref(
             "counter", dict(id=FixtureType.COUNTER, ref=self.stove, size=[0.30, 0.40])
         )
+        self.target_obj_str = "obj"
+        self.target_place_str = "container"
         self.init_robot_base_pos = self.stove
 
     def get_ep_meta(self):
@@ -1011,9 +1027,9 @@ class PnPStoveToCounter(PnP):
         cont_lang, preposition = self.get_obj_lang(
             obj_name="container", get_preposition=True
         )
-        ep_meta[
-            "lang"
-        ] = f"pick the {obj_lang} from the {obj_cont_lang} and place it {preposition} the {cont_lang}"
+        ep_meta["lang"] = f"pick the {obj_lang} from the {obj_cont_lang} and place it {preposition} the {cont_lang}"
+        self.target_obj_phrase = obj_lang
+        self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):

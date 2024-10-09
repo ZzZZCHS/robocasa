@@ -92,6 +92,8 @@ class ManipulateDrawer(Kitchen):
         """
         super()._setup_kitchen_references()
         self.drawer = self.register_fixture_ref("drawer", dict(id=self.drawer_id))
+        self.target_obj_str = self.drawer.name
+        self.target_place_str = None
         self.init_robot_base_pos = self.drawer
 
     def get_ep_meta(self):
@@ -101,6 +103,8 @@ class ManipulateDrawer(Kitchen):
         """
         ep_meta = super().get_ep_meta()
         ep_meta["lang"] = f"{self.behavior} the {self.drawer_side} drawer"
+        self.target_obj_phrase = f"{self.drawer_side} drawer"
+        self.target_place_phrase = None
         return ep_meta
 
     def check_fxtr_contact(self, pos):
