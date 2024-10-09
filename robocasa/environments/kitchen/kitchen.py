@@ -493,37 +493,35 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                 try_to_place_in = cfg["placement"].get("try_to_place_in", None)
 
                 # place object in a container and add container as an object to the scene
-                if try_to_place_in and (
-                    "in_container" in cfg["info"]["groups_containing_sampled_obj"]
-                ):
-                    container_cfg = {}
-                    container_cfg["name"] = cfg["name"] + "_container"
-                    container_cfg["obj_groups"] = try_to_place_in
-                    container_cfg["placement"] = deepcopy(cfg["placement"])
-                    container_cfg["type"] = "object"
+                # if try_to_place_in and (
+                #     "in_container" in cfg["info"]["groups_containing_sampled_obj"]
+                # ):
+                #     container_cfg = {}
+                #     container_cfg["name"] = cfg["name"] + "_container"
+                #     container_cfg["obj_groups"] = try_to_place_in
+                #     container_cfg["placement"] = deepcopy(cfg["placement"])
+                #     container_cfg["type"] = "object"
 
-                    print(f"Add {container_cfg['name']} to the scene.")
+                #     container_kwargs = cfg["placement"].get("container_kwargs", None)
+                #     if container_kwargs is not None:
+                #         for k, v in container_kwargs.values():
+                #             container_cfg[k] = v
 
-                    container_kwargs = cfg["placement"].get("container_kwargs", None)
-                    if container_kwargs is not None:
-                        for k, v in container_kwargs.values():
-                            container_cfg[k] = v
+                #     # add in the new object to the model
+                #     addl_obj_cfgs.append(container_cfg)
+                #     model, info = _create_obj(container_cfg)
+                #     container_cfg["info"] = info
+                #     self.objects[model.name] = model
+                #     self.model.merge_objects([model], extend=True)
 
-                    # add in the new object to the model
-                    addl_obj_cfgs.append(container_cfg)
-                    model, info = _create_obj(container_cfg)
-                    container_cfg["info"] = info
-                    self.objects[model.name] = model
-                    self.model.merge_objects([model], extend=True)
-
-                    # modify object config to lie inside of container
-                    cfg["placement"] = dict(
-                        size=(0.01, 0.01),
-                        ensure_object_boundary_in_range=False,
-                        sample_args=dict(
-                            reference=container_cfg["name"],
-                        ),
-                    )
+                #     # modify object config to lie inside of container
+                #     cfg["placement"] = dict(
+                #         size=(0.01, 0.01),
+                #         ensure_object_boundary_in_range=False,
+                #         sample_args=dict(
+                #             reference=container_cfg["name"],
+                #         ),
+                #     )
 
             # prepend the new object configs in
             self.object_cfgs = addl_obj_cfgs + self.object_cfgs

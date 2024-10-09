@@ -937,6 +937,7 @@ class PnPCounterToStove(PnP):
         cfgs.append(
             dict(
                 name="obj",
+                type="object",
                 obj_groups=self.obj_groups,
                 exclude_obj_groups=self.exclude_obj_groups,
                 graspable=True,
@@ -963,7 +964,10 @@ class PnPCounterToStove(PnP):
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="all",
+                    obj_groups=self.obj_groups,
+                    exclude_obj_groups=self.exclude_obj_groups,
+                    graspable=True,
+                    cookable=True,
                     type="object",
                     placement=dict(
                         fixture=self.counter,

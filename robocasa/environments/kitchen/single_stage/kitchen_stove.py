@@ -59,7 +59,7 @@ class ManipulateStoveKnob(Kitchen):
             knob=self.knob,
             cookware_burner=self.cookware_burner,
         )
-        self.target_obj_phrase = "stove"
+        self.target_obj_phrase = f"{self.knob.replace('_', ' ')} burner"
         self.target_place_phrase = None
         return ep_meta
 
@@ -114,11 +114,15 @@ class ManipulateStoveKnob(Kitchen):
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="all",
                     type="object",
                     placement=dict(
-                        fixture=self.counter
+                    fixture=self.counter,
+                    sample_region_kwargs=dict(
+                        ref=self.stove,
                     ),
+                    size=(0.30, 0.30),
+                    pos=("ref", -1.0)
+                ),
                 )
             )
 

@@ -103,6 +103,7 @@ class ManipulateSinkFaucet(Kitchen):
                 dict(
                     name=f"new_distr_{i}",
                     obj_groups="all",
+                    washable=True,
                     type="object",
                     placement=dict(
                         fixture=self.sink,
@@ -244,6 +245,7 @@ class TurnSinkSpout(Kitchen):
                 dict(
                     name=f"new_distr_{i}",
                     obj_groups="all",
+                    washable=True,
                     type="object",
                     placement=dict(
                         fixture=self.sink,
