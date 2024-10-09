@@ -464,7 +464,6 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
             # make sure the first object is "obj"
-            # breakpoint()
             for obj_num, cfg in enumerate(self.object_cfgs):
                 if target_obj_name is not None:
                     cfg['target_obj_name'] = target_obj_name
