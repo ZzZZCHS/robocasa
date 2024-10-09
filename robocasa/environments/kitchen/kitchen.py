@@ -463,6 +463,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         self.objects = {}
         target_obj_name = self.target_obj_name
         unique_attr = self.unique_attr = random.choice(['color', 'shape', 'material', 'class'])
+        # breakpoint()
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
             # make sure the first object is "obj"
@@ -500,6 +501,8 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                     container_cfg["obj_groups"] = try_to_place_in
                     container_cfg["placement"] = deepcopy(cfg["placement"])
                     container_cfg["type"] = "object"
+
+                    print(f"Add {container_cfg['name']} to the scene.")
 
                     container_kwargs = cfg["placement"].get("container_kwargs", None)
                     if container_kwargs is not None:

@@ -71,6 +71,7 @@ class MicrowavePressButton(Kitchen):
     def _get_more_obj_cfgs(self):
         cfgs = []
 
+        # generate objects on counter
         for i in range(1, self.add_object_num+1):
             # distractors
             cfgs.append(
@@ -78,6 +79,7 @@ class MicrowavePressButton(Kitchen):
                     name=f"new_distr_{i}",
                     obj_groups="all",
                     type="object",
+                    heatable=True,
                     placement=dict(
                         fixture=self.counter
                     ),

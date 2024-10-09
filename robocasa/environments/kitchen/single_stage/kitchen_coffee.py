@@ -107,7 +107,7 @@ class PnPCoffee(Kitchen):
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="all",
+                    obj_groups="mug",
                     type="object",
                     # inside drawer
                     placement=dict(
@@ -222,7 +222,7 @@ class CoffeePressButton(Kitchen):
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="all",
+                    obj_groups="mug",
                     type="object",
                     # inside drawer
                     placement=dict(

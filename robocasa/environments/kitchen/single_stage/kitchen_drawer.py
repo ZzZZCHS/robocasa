@@ -254,7 +254,8 @@ class OpenDrawer(ManipulateDrawer):
                     # inside drawer
                     placement=dict(
                         fixture=self.drawer,
-                        size=(0.50, 0.50)
+                        # size=(0.30, 0.30),
+                        # pos=(None, -0.75),
                     ),
                 )
             )

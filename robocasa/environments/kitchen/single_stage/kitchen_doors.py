@@ -100,7 +100,7 @@ class ManipulateDoor(Kitchen):
 
         cfgs.append(
             dict(
-                name="door_obj", # 原来为door_obj
+                name="door_obj", 
                 obj_groups="all",
                 graspable=True,
                 microwavable=(True if isinstance(self.door_fxtr, Microwave) else None),
@@ -146,6 +146,7 @@ class ManipulateDoor(Kitchen):
                     obj_groups="all",
                     type="object",
                     # inside door
+                    microwavable=(True if isinstance(self.door_fxtr, Microwave) else None),
                     placement=dict(
                         fixture=self.door_fxtr,
                         size=(0.30, 0.30),
@@ -153,6 +154,26 @@ class ManipulateDoor(Kitchen):
                     ),
                 )
             )
+
+        # for i in range(self.add_object_num + 1, self.add_object_num * 2 + 1):
+        #     cfgs.append(
+        #         dict(
+        #             name=f"new_distr_{i}",
+        #             obj_groups="all",
+        #             type="object",
+        #             placement=dict(
+        #                 fixture=self.get_fixture(
+        #                     FixtureType.COUNTER, ref=self.door_fxtr
+        #                 ),
+        #                 sample_region_kwargs=dict(
+        #                     ref=self.door_fxtr,
+        #                 ),
+        #                 size=(1.0, 0.50),
+        #                 pos=(None, -1.0),
+        #                 offset=(0.0, 0.10),
+        #             ),
+        #         )
+        #     )
 
         return cfgs
 
