@@ -26,10 +26,12 @@ class PnPCoffee(Kitchen):
         self.counter = self.get_fixture(FixtureType.COUNTER, ref=self.coffee_machine)
         self.target_obj_str = "obj"
         if self.behavior == "counter_to_machine":
-            self.target_place_str = self.coffee_machine.name
+            self.target_place_str = self.coffee_machine.name + "_main"
         else:
-            self.target_place_str = self.counter.name
+            self.target_place_str = self.counter.name + "_main"
         self.init_robot_base_pos = self.coffee_machine
+        if 'class' in self.attr_list:
+            self.attr_list.remove('class') # distractor's group == obj's group
 
     def get_ep_meta(self):
         """
@@ -46,7 +48,7 @@ class PnPCoffee(Kitchen):
                 "lang"
             ] = f"pick the {obj_lang} from the counter and place it under the coffee machine dispenser"
             self.target_obj_phrase = f"{obj_lang}"
-            self.target_place_phrase = "coffee machine dispenser"
+            self.target_place_phrase = "coffee machine"
         elif self.behavior == "machine_to_counter":
             ep_meta[
                 "lang"
@@ -107,12 +109,12 @@ class PnPCoffee(Kitchen):
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="mug",
+                    obj_groups=("mug", "cup", "coffee_cup", "water_bottle"),
                     type="object",
-                    # inside drawer
                     placement=dict(
                         fixture=self.counter,
-                        size=(0.50, 0.50)
+                        size=(0.50, 0.50),
+                        rotation=[np.pi / 4, np.pi / 2],
                     ),
                 )
             )
@@ -171,7 +173,7 @@ class CoffeePressButton(Kitchen):
         super()._setup_kitchen_references()
         self.coffee_machine = self.get_fixture("coffee_machine")
         self.counter = self.get_fixture(FixtureType.COUNTER, ref=self.coffee_machine)
-        self.target_obj_str = self.coffee_machine.name
+        self.target_obj_str = self.coffee_machine.name + "_main"
         self.target_place_str = None
         self.init_robot_base_pos = self.coffee_machine
 
@@ -222,12 +224,12 @@ class CoffeePressButton(Kitchen):
             cfgs.append(
                 dict(
                     name=f"new_distr_{i}",
-                    obj_groups="mug",
+                    obj_groups=("mug", "cup", "coffee_cup", "water_bottle"),
                     type="object",
-                    # inside drawer
                     placement=dict(
                         fixture=self.counter,
-                        size=(0.50, 0.50)
+                        size=(0.50, 0.50),
+                        rotation=[np.pi / 4, np.pi / 2],
                     ),
                 )
             )

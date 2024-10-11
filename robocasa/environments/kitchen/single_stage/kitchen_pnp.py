@@ -50,7 +50,7 @@ class PnPCounterToCab(PnP):
             "counter", dict(id=FixtureType.COUNTER, ref=self.cab)
         )
         self.target_obj_str = "obj"
-        self.target_place_str = self.cab.name
+        self.target_place_str = self.cab.name + "_main"
         self.init_robot_base_pos = self.cab
 
     def get_ep_meta(self):
@@ -195,7 +195,7 @@ class PnPCabToCounter(PnP):
             dict(id=FixtureType.COUNTER, ref=self.cab),
         )
         self.target_obj_str = "obj"
-        self.target_place_str = self.counter.name
+        self.target_place_str = self.counter.name + "_main"
         self.init_robot_base_pos = self.cab
 
     def get_ep_meta(self):
@@ -330,7 +330,7 @@ class PnPCounterToSink(PnP):
             dict(id=FixtureType.COUNTER, ref=self.sink),
         )
         self.target_obj_str = "obj"
-        self.target_place_str = self.sink.name
+        self.target_place_str = self.sink.name + "_main"
         self.init_robot_base_pos = self.sink
 
     def get_ep_meta(self):
@@ -419,9 +419,8 @@ class PnPCounterToSink(PnP):
                             ref=self.sink,
                             loc="left_right",
                         ),
-                        size=(0.30, 0.30),
+                        size=(0.30, 0.40),
                         pos=("ref", -1.0),
-                        offset=(0.0, 0.30),
                     ),
                 )
             )
@@ -469,7 +468,7 @@ class PnPSinkToCounter(PnP):
             dict(id=FixtureType.COUNTER, ref=self.sink),
         )
         self.target_obj_str = "obj"
-        self.target_place_str = "container"
+        self.target_place_str = "container_main"
         self.init_robot_base_pos = self.sink
 
     def get_ep_meta(self):
@@ -608,7 +607,7 @@ class PnPCounterToMicrowave(PnP):
             dict(id=FixtureType.COUNTER, ref=self.microwave),
         )
         self.target_obj_str = "obj"
-        self.target_place_str = self.microwave.name
+        self.target_place_str = self.microwave.name + "_main"
         self.init_robot_base_pos = self.microwave
 
     def _reset_internal(self):
@@ -701,11 +700,11 @@ class PnPCounterToMicrowave(PnP):
                     type="object",
                     placement=dict(
                         fixture=self.counter,
-                        # sample_region_kwargs=dict(
-                        #     ref=self.microwave,
-                        # ),
-                        # size=(0.30, 0.30),
-                        # pos=("ref", -1.0),
+                        sample_region_kwargs=dict(
+                            ref=self.microwave,
+                        ),
+                        size=(0.30, 0.30),
+                        pos=("ref", -1.0),
                         try_to_place_in="container",
                     ),
                 )
@@ -764,7 +763,7 @@ class PnPMicrowaveToCounter(PnP):
             dict(id=FixtureType.COUNTER, ref=self.microwave),
         )
         self.target_obj_str = "obj"
-        self.target_place_str = "container"
+        self.target_place_str = "container_main"
         self.init_robot_base_pos = self.microwave
 
     def _reset_internal(self):
@@ -898,7 +897,7 @@ class PnPCounterToStove(PnP):
             "counter", dict(id=FixtureType.COUNTER, ref=self.stove, size=[0.30, 0.40])
         )
         self.target_obj_str = "obj"
-        self.target_place_str = "container"
+        self.target_place_str = "container_main"
         self.init_robot_base_pos = self.stove
 
     def get_ep_meta(self):
@@ -920,20 +919,7 @@ class PnPCounterToStove(PnP):
         Puts the target object in a container on the counter and places pan on the stove.
         """
         cfgs = []
-
-        cfgs.append(
-            dict(
-                name="container",
-                obj_groups=("pan"),
-                placement=dict(
-                    fixture=self.stove,
-                    ensure_object_boundary_in_range=False,
-                    size=(0.02, 0.02),
-                    rotation=[(-3 * np.pi / 8, -np.pi / 4), (np.pi / 4, 3 * np.pi / 8)],
-                ),
-            )
-        )
-
+        
         cfgs.append(
             dict(
                 name="obj",
@@ -950,6 +936,19 @@ class PnPCounterToStove(PnP):
                     size=(0.30, 0.30),
                     pos=("ref", -1.0),
                     try_to_place_in="container",
+                ),
+            )
+        )
+
+        cfgs.append(
+            dict(
+                name="container",
+                obj_groups=("pan"),
+                placement=dict(
+                    fixture=self.stove,
+                    ensure_object_boundary_in_range=False,
+                    size=(0.02, 0.02),
+                    rotation=[(-3 * np.pi / 8, -np.pi / 4), (np.pi / 4, 3 * np.pi / 8)],
                 ),
             )
         )
@@ -971,12 +970,12 @@ class PnPCounterToStove(PnP):
                     type="object",
                     placement=dict(
                         fixture=self.counter,
-                        # sample_region_kwargs=dict(
-                        #     ref=self.stove,
-                        # ),
-                        # size=(0.50, 0.50),
-                        # pos=("ref", -1.0),
-                        try_to_place_in="container",
+                        sample_region_kwargs=dict(
+                            ref=self.stove,
+                        ),
+                        size=(0.50, 0.50),
+                        pos=("ref", -1.0),
+                        # try_to_place_in="container",
                     ),
                 )
             )
@@ -1017,7 +1016,7 @@ class PnPStoveToCounter(PnP):
             "counter", dict(id=FixtureType.COUNTER, ref=self.stove, size=[0.30, 0.40])
         )
         self.target_obj_str = "obj"
-        self.target_place_str = "container"
+        self.target_place_str = "container_main"
         self.init_robot_base_pos = self.stove
 
     def get_ep_meta(self):
@@ -1103,12 +1102,16 @@ class PnPStoveToCounter(PnP):
                     name=f"new_distr_{i}",
                     obj_groups=self.obj_groups,
                     type="object",
+                    exclude_obj_groups=self.exclude_obj_groups,
+                    graspable=True,
+                    cookable=True,
+                    max_size=(0.15, 0.15, None),
                     placement=dict(
                         fixture=self.stove,
                         ensure_object_boundary_in_range=False,
-                        size=(0.4, 0.4),
+                        size=(0.02, 0.02),
                         rotation=[(-3 * np.pi / 8, -np.pi / 4), (np.pi / 4, 3 * np.pi / 8)],
-                        try_to_place_in="pan",
+                        # try_to_place_in="pan",
                     ),
                 )
             )

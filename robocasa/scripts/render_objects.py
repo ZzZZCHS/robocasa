@@ -89,12 +89,15 @@ def process_obj(obj_files, save_path):
     
 
 
-data_dir = "/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/robocasa/models/assets/objects/objaverse"
+data_dir = "/ailab/user/huanghaifeng/work/robocasa_exps_haifeng/robocasa/robocasa/models/assets/objects/aigen_objs"
 failed_objs = []
 for obj_class in tqdm(os.listdir(data_dir)):
     print('processing', obj_class)
     obj_class_dir = os.path.join(data_dir, obj_class)
     for obj_name in tqdm(os.listdir(obj_class_dir)):
+        if obj_name.startswith('._'):
+            os.remove(os.path.join(obj_class_dir, obj_name))
+            continue
         if not obj_name.startswith(obj_class):
             continue
         obj_dir = os.path.join(obj_class_dir, obj_name)
@@ -102,7 +105,9 @@ for obj_class in tqdm(os.listdir(data_dir)):
         obj_files = glob.glob(os.path.join(obj_dir, 'visual/*.obj'))
         try:
             process_obj(obj_files, save_path)
-        except:
+        except KeyboardInterrupt:
+            exit(0)
+        except Exception as e:
             print('fail', obj_dir)
             failed_objs.append(f"{obj_class}/{obj_name}")
 

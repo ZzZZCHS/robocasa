@@ -288,6 +288,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         self.no_placement = False
         self.target_obj_str = "obj"
         self.target_place_str = None
+        self.attr_list = ['color', 'shape', 'material', 'class']
 
         super().__init__(
             robots=robots,
@@ -462,11 +463,10 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         # add objects
         self.objects = {}
         target_obj_name = self.target_obj_name
-        unique_attr = self.unique_attr = random.choice(['color', 'shape', 'material', 'class'])
+        unique_attr = self.unique_attr = random.choice(self.attr_list)
         # breakpoint()
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
-            # make sure the first object is "obj"
             for obj_num, cfg in enumerate(self.object_cfgs):
                 if target_obj_name is not None:
                     cfg['target_obj_name'] = target_obj_name
