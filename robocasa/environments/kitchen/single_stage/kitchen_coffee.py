@@ -47,14 +47,16 @@ class PnPCoffee(Kitchen):
             ep_meta[
                 "lang"
             ] = f"pick the {obj_lang} from the counter and place it under the coffee machine dispenser"
-            self.target_obj_phrase = f"{obj_lang}"
-            self.target_place_phrase = "coffee machine"
+            if self.target_obj_phrase is None:
+                self.target_obj_phrase = obj_lang
+                self.target_place_phrase = "coffee machine"
         elif self.behavior == "machine_to_counter":
             ep_meta[
                 "lang"
             ] = f"pick the {obj_lang} from under the coffee machine dispenser and place it on the counter"
-            self.target_obj_phrase = obj_lang
-            self.target_place_phrase = "counter"
+            if self.target_obj_phrase is None:
+                self.target_obj_phrase = obj_lang
+                self.target_place_phrase = "counter"
         return ep_meta
 
     def _get_obj_cfgs(self):

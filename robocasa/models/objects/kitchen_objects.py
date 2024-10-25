@@ -2525,7 +2525,7 @@ def sample_kitchen_object_helper(
         
         choices = {reg: [] for reg in obj_registries}
         
-        if cfg and cfg.get('target_obj_name', None):
+        if cfg and cfg.get('target_obj_name', None) and "distr" in cfg["name"]:
             target_obj_name = cfg['target_obj_name']
             unique_attr = cfg['unique_attr']
             for reg in obj_registries:

@@ -226,7 +226,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         obj_instance_split=None,
         use_distractors=False,
         translucent_robot=False,
-        randomize_cameras=False
+        randomize_cameras=False,
     ):
         self.init_robot_base_pos = init_robot_base_pos
 
@@ -285,11 +285,16 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         
         self.target_obj_name = None
         self.unique_attr = None
-        self.no_placement = False
         self.target_obj_str = "obj"
         self.target_place_str = None
+        self.target_obj_phrase = None
+        self.target_place_phrase = None
         self.attr_list = ['color', 'shape', 'material', 'class']
+        self.object_placements = None
+        self.max_retry_time = 3
+        self.attribute_based = True
 
+        self.no_placement = True
         super().__init__(
             robots=robots,
             env_configuration=env_configuration,
@@ -320,14 +325,18 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
             renderer_config=renderer_config,
             seed=seed,
         )
+        self.no_placement = False
 
     def _load_model(self, retry_time=0):
         """
         Loads an xml model, puts it in self.model
         """
-        if retry_time > 3:
+        if retry_time > self.max_retry_time:
             raise RandomizationError
         super()._load_model()
+        
+        self.target_obj_phrase = None
+        self.target_place_phrase = None
 
         # determine sample layout and style
         if "layout_id" in self._ep_meta and "style_id" in self._ep_meta:
@@ -463,8 +472,10 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         # add objects
         self.objects = {}
         target_obj_name = self.target_obj_name
-        unique_attr = self.unique_attr = random.choice(self.attr_list)
-        # breakpoint()
+        if "unique_attr" in self._ep_meta:
+            unique_attr = self.unique_attr = self._ep_meta["unique_attr"]
+        else:
+            unique_attr = self.unique_attr = random.choice(self.attr_list)
         if "object_cfgs" in self._ep_meta:
             self.object_cfgs = self._ep_meta["object_cfgs"] + self._get_more_obj_cfgs()
             for obj_num, cfg in enumerate(self.object_cfgs):
@@ -493,35 +504,35 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                 try_to_place_in = cfg["placement"].get("try_to_place_in", None)
 
                 # place object in a container and add container as an object to the scene
-                # if try_to_place_in and (
-                #     "in_container" in cfg["info"]["groups_containing_sampled_obj"]
-                # ):
-                #     container_cfg = {}
-                #     container_cfg["name"] = cfg["name"] + "_container"
-                #     container_cfg["obj_groups"] = try_to_place_in
-                #     container_cfg["placement"] = deepcopy(cfg["placement"])
-                #     container_cfg["type"] = "object"
+                if try_to_place_in and (
+                    "in_container" in cfg["info"]["groups_containing_sampled_obj"]
+                ):
+                    container_cfg = {}
+                    container_cfg["name"] = cfg["name"] + "_container"
+                    container_cfg["obj_groups"] = try_to_place_in
+                    container_cfg["placement"] = deepcopy(cfg["placement"])
+                    container_cfg["type"] = "object"
 
-                #     container_kwargs = cfg["placement"].get("container_kwargs", None)
-                #     if container_kwargs is not None:
-                #         for k, v in container_kwargs.values():
-                #             container_cfg[k] = v
+                    container_kwargs = cfg["placement"].get("container_kwargs", None)
+                    if container_kwargs is not None:
+                        for k, v in container_kwargs.values():
+                            container_cfg[k] = v
 
-                #     # add in the new object to the model
-                #     addl_obj_cfgs.append(container_cfg)
-                #     model, info = _create_obj(container_cfg)
-                #     container_cfg["info"] = info
-                #     self.objects[model.name] = model
-                #     self.model.merge_objects([model], extend=True)
+                    # add in the new object to the model
+                    addl_obj_cfgs.append(container_cfg)
+                    model, info = _create_obj(container_cfg)
+                    container_cfg["info"] = info
+                    self.objects[model.name] = model
+                    self.model.merge_objects([model], extend=True)
 
-                #     # modify object config to lie inside of container
-                #     cfg["placement"] = dict(
-                #         size=(0.01, 0.01),
-                #         ensure_object_boundary_in_range=False,
-                #         sample_args=dict(
-                #             reference=container_cfg["name"],
-                #         ),
-                #     )
+                    # modify object config to lie inside of container
+                    cfg["placement"] = dict(
+                        size=(0.01, 0.01),
+                        ensure_object_boundary_in_range=False,
+                        sample_args=dict(
+                            reference=container_cfg["name"],
+                        ),
+                    )
 
             # prepend the new object configs in
             self.object_cfgs = addl_obj_cfgs + self.object_cfgs
@@ -835,7 +846,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         super()._reset_internal()
 
         # Reset all object positions using initializer sampler if we're not directly loading from an xml
-        if not self.deterministic_reset and self.placement_initializer is not None:
+        if not self.deterministic_reset and self.placement_initializer is not None and self.object_placements is not None:
             # use pre-computed object placements
             object_placements = self.object_placements
 

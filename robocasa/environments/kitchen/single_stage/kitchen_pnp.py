@@ -61,8 +61,9 @@ class PnPCounterToCab(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         ep_meta["lang"] = f"pick the {obj_lang} from the counter and place it in the cabinet"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = "cabinet"
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = "cabinet"
         return ep_meta
 
     def _reset_internal(self):
@@ -206,8 +207,9 @@ class PnPCabToCounter(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         ep_meta["lang"] = f"pick the {obj_lang} from the cabinet and place it on the counter"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = "counter"
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = "counter"
         return ep_meta
 
     def _reset_internal(self):
@@ -341,8 +343,9 @@ class PnPCounterToSink(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         ep_meta["lang"] = f"pick the {obj_lang} from the counter and place it in the sink"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = "sink"
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = "sink"
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -480,8 +483,9 @@ class PnPSinkToCounter(PnP):
         obj_lang = self.get_obj_lang()
         cont_lang = self.get_obj_lang(obj_name="container")
         ep_meta["lang"] = f"pick the {obj_lang} from the sink and place it on the {cont_lang} located on the counter"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = cont_lang
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -625,8 +629,9 @@ class PnPCounterToMicrowave(PnP):
         ep_meta = super().get_ep_meta()
         obj_lang = self.get_obj_lang()
         ep_meta["lang"] = f"pick the {obj_lang} from the counter and place it in the microwave"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = "microwave"
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = "microwave"
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -782,8 +787,9 @@ class PnPMicrowaveToCounter(PnP):
         obj_lang = self.get_obj_lang()
         cont_lang = self.get_obj_lang(obj_name="container")
         ep_meta["lang"] = f"pick the {obj_lang} from the microwave and place it on {cont_lang} located on the counter"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = cont_lang
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -909,8 +915,9 @@ class PnPCounterToStove(PnP):
         obj_lang = self.get_obj_lang()
         cont_lang = self.get_obj_lang(obj_name="container")
         ep_meta["lang"] = f"pick the {obj_lang} from the plate and place it in the {cont_lang}"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = cont_lang
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
@@ -1031,8 +1038,9 @@ class PnPStoveToCounter(PnP):
             obj_name="container", get_preposition=True
         )
         ep_meta["lang"] = f"pick the {obj_lang} from the {obj_cont_lang} and place it {preposition} the {cont_lang}"
-        self.target_obj_phrase = obj_lang
-        self.target_place_phrase = cont_lang
+        if self.target_obj_phrase is None:
+            self.target_obj_phrase = obj_lang
+            self.target_place_phrase = cont_lang
         return ep_meta
 
     def _get_obj_cfgs(self):
