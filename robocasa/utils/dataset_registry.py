@@ -6,7 +6,7 @@ from pathlib import Path
 import robocasa
 import robocasa.macros as macros
 
-data_version = "generated_1013"
+data_version = "generated_1024"
 
 SINGLE_STAGE_TASK_DATASETS = OrderedDict(
     PnPCounterToCab=dict(

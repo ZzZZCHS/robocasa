@@ -373,7 +373,7 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         # setup fixtures
         self.fixture_cfgs = self.mujoco_arena.get_fixture_cfgs()
         self.fixtures = {cfg["name"]: cfg["model"] for cfg in self.fixture_cfgs}
-
+        
         # setup scene, robots, objects
         self.model = ManipulationTask(
             mujoco_arena=self.mujoco_arena,

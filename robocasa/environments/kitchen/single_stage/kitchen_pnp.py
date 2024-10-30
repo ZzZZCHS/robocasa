@@ -21,6 +21,11 @@ class PnP(Kitchen):
     def _get_obj_cfgs(self):
         raise NotImplementedError
 
+    def reward(self, action=None):
+        if OU.check_obj_gripper_contact(self, 'obj'):
+            return 1
+        return 0
+
 
 class PnPCounterToCab(PnP):
     """
@@ -163,6 +168,7 @@ class PnPCounterToCab(PnP):
         obj_inside_cab = OU.obj_inside_of(self, "obj", self.cab)
         gripper_obj_far = OU.gripper_obj_far(self)
         return obj_inside_cab and gripper_obj_far
+
 
 
 class PnPCabToCounter(PnP):
