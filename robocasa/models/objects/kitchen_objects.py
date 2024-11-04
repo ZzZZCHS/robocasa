@@ -300,7 +300,7 @@ OBJ_CATEGORIES = dict(
         objaverse_extra=dict(
             model_folders=["objaverse_extra/bowl"],
             scale=1.3,
-            exclude=["bowl_53", "bowl_24"]
+            exclude=["bowl_53", "bowl_24", "bowl_15"]
         )
     ),
     boxed_drink=dict(
@@ -429,6 +429,7 @@ OBJ_CATEGORIES = dict(
         objaverse_extra=dict(
             model_folders=["objaverse_extra/can"],
             scale=0.9,
+            exclude=["can_41"]
         )
     ),
     candle=dict(
@@ -590,6 +591,7 @@ OBJ_CATEGORIES = dict(
         objaverse_extra=dict(
             model_folders=["objaverse_extra/coffee_cup"],
             scale=0.8,
+            exclude=["coffee_cup_44"]
         )
     ),
     condiment_bottle=dict(
@@ -826,6 +828,7 @@ OBJ_CATEGORIES = dict(
         objaverse_extra=dict(
             model_folders=["objaverse_extra/garlic"],
             scale=1.0,
+            exclude=["garlic_1"]
         )
     ),
     hot_dog=dict(
@@ -2438,18 +2441,6 @@ OBJ_CATEGORIES = dict(
             scale=2.0
         )
     ),
-    barrel=dict(
-        types=("receptable"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/basket"],
-            scale=1.5
-        )
-    ),
     bottle=dict(
         types=("drink"),
         graspable=True,
@@ -2805,6 +2796,7 @@ class ObjCat:
         friction=(0.95, 0.3, 0.1),
         priority=None,
         aigen_cat=False,
+        source="objaverse"
     ):
         self.name = name
         if not isinstance(types, tuple):
@@ -2828,7 +2820,9 @@ class ObjCat:
         self.exclude = exclude or []
 
         if model_folders is None:
-            subf = "aigen_objs" if self.aigen_cat else "objaverse"
+            # subf = "aigen_objs" if self.aigen_cat else "objaverse"
+            # model_folders = ["{}/{}".format(subf, name)]
+            subf = source
             model_folders = ["{}/{}".format(subf, name)]
         cat_mjcf_paths = []
         for folder in model_folders:
@@ -2873,21 +2867,26 @@ for (name, kwargs) in OBJ_CATEGORIES.items():
             "types",
             "aigen",
             "objaverse",
+            "objaverse_extra"
         ]
     objaverse_kwargs = common_properties.pop("objaverse", None)
     aigen_kwargs = common_properties.pop("aigen", None)
+    objaverse_extra_kwargs = common_properties.pop("objaverse_extra", None)
     assert "scale" not in kwargs
     OBJ_CATEGORIES[name] = {}
 
     # create instances
     if objaverse_kwargs is not None:
         objaverse_kwargs.update(common_properties)
-        OBJ_CATEGORIES[name]["objaverse"] = ObjCat(name=name, **objaverse_kwargs)
+        OBJ_CATEGORIES[name]["objaverse"] = ObjCat(name=name, source="objaverse", **objaverse_kwargs)
     if aigen_kwargs is not None:
         aigen_kwargs.update(common_properties)
         OBJ_CATEGORIES[name]["aigen"] = ObjCat(
-            name=name, aigen_cat=True, **aigen_kwargs
+            name=name, aigen_cat=True, source="aigen_objs", **aigen_kwargs
         )
+    if objaverse_extra_kwargs is not None:
+        objaverse_extra_kwargs.update(common_properties)
+        OBJ_CATEGORIES[name]["objaverse_extra"] = ObjCat(name=name, source="objaverse_extra", **objaverse_extra_kwargs)
 
 
 
@@ -2942,6 +2941,7 @@ def sample_kitchen_object(
         dict: info about the sampled object - the path of the mjcf, groups which the object's category belongs to, the category of the object
               the sampling split the object came from, and the groups the object was sampled from
     """
+    # breakpoint()
     valid_object_sampled = False
     while valid_object_sampled is False:
         mjcf_kwargs, info = sample_kitchen_object_helper(
@@ -3162,7 +3162,12 @@ def sample_kitchen_object_helper(
                     # breakpoint()
                 choice_map = {}
                 for path in tmp_choices:
-                    choice_map[path.split('/')[-2]] = path
+                    source = path.split('/')[-4]
+                    id = path.split('/')[-2]
+                    obj_name = f"{source}_{id}"
+                    # choice_map[path.split('/')[-2]] = path
+                    choice_map[obj_name] = path
+                # breakpoint()
                 target_obj_info = ALL_OBJ_INFOS['obj_infos'][target_obj_name]
                 unique_attr2objs = ALL_OBJ_INFOS[f"{unique_attr}2objs"]
                 unique_attrs = target_obj_info[unique_attr]

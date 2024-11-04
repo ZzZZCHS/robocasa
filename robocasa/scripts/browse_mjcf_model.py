@@ -178,15 +178,18 @@ def get_model_screenshot(
     t = time.time()
     render_context = MjRenderContextOffscreen(sim, device_id=-1)
     render_context.vopt.geomgroup[0] = 0
+
     # if cam_settings is None:
     #     cam_settings = {}
     # render_context.cam.distance = cam_settings.get("distance", 1.75)
     # render_context.cam.elevation = cam_settings.get("elevation", -30)
+
     sim.add_render_context(render_context)
 
     print(info["sim_load_time"] + (time.time() - t))
 
     image = sim.render(width=im_width, height=im_height)[::-1]
+
 
     return image
 
@@ -225,6 +228,7 @@ if __name__ == "__main__":
     #     "distance": 0.3,
     #     "elevation": -30,
     # }
+
     while True:
         cam_settings = None
 
@@ -243,7 +247,9 @@ if __name__ == "__main__":
                 cam_settings=cam_settings,
             )
             im = Image.fromarray(image)
-            im.save("screenshot.png")
+            im.save("/ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/scripts/screenshot.png")
+            print("save screenshot png")
+            break
         else:
             render_model(
                 sim=sim,
@@ -252,3 +258,7 @@ if __name__ == "__main__":
 
     # cv2.imshow('image', image[:,:,::-1])
     # cv2.waitKey(0)
+
+
+# python browse_mjcf_model.py --mjcf /ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/models/assets/objects/objaverse_extra/alcohol/alcohol_2/model.xml --screenshot
+# python browse_mjcf_model.py --mjcf /ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/models/assets/objects/objaverse/alcohol/alcohol_2/model.xml --screenshot  
