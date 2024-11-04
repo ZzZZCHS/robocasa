@@ -251,12 +251,15 @@ class OpenDrawer(ManipulateDrawer):
                     name=f"new_distr_{i}",
                     obj_groups="all",
                     type="object",
-                    # inside drawer
                     placement=dict(
-                        fixture=self.drawer,
-                        # size=(0.30, 0.30),
-                        # pos=(None, -0.75),
-                    ),
+                        fixture=self.get_fixture(FixtureType.COUNTER, ref=self.drawer),
+                        sample_region_kwargs=dict(
+                            ref=self.drawer,
+                        ),
+                        size=(1.0, 0.50),
+                        pos=(None, -1.0),
+                        offset=(0.0, 0.10),
+                    )
                 )
             )
 
@@ -327,12 +330,14 @@ class CloseDrawer(ManipulateDrawer):
                     name=f"new_distr_{i}",
                     obj_groups="all",
                     type="object",
-                    # inside drawer
                     placement=dict(
-                        fixture=self.drawer,
-                        size=(0.50, 0.50),
-                        pos=(None, -0.80),
-                        offset=(0, -self.drawer.size[1] * 0.75),
+                        fixture=self.get_fixture(FixtureType.COUNTER, ref=self.drawer),
+                        sample_region_kwargs=dict(
+                            ref=self.drawer,
+                        ),
+                        size=(1.0, 0.50),
+                        pos=(None, -1.0),
+                        offset=(0.0, 0.10),
                     ),
                 )
             )

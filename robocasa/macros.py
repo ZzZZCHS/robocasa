@@ -7,7 +7,7 @@ To make sure global reference is maintained, should import these settings as:
 `import robocasa.macros as macros`
 """
 
-SHOW_SITES = True
+SHOW_SITES = False
 
 # whether to print debugging information
 VERBOSE = False

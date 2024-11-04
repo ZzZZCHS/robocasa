@@ -346,6 +346,12 @@ def check_obj_fixture_contact(env, obj_name, fixture_name):
     return env.check_contact(obj, fixture)
 
 
+def check_obj_gripper_contact(env, obj_name):
+    obj = env.objects[obj_name]
+    gripper = env.robots[0].gripper['right']
+    return env.check_contact(obj, gripper)
+
+
 def gripper_obj_far(env, obj_name="obj", th=0.25):
     """
     check if gripper is far from object based on distance defined by threshold

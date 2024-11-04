@@ -27,9 +27,16 @@ class ManipulateDoor(Kitchen):
         """
         super()._setup_kitchen_references()
         self.door_fxtr = self.register_fixture_ref("door_fxtr", dict(id=self.door_id))
-        self.target_obj_str = self.door_fxtr.name
-        self.target_place_str = None
         self.init_robot_base_pos = self.door_fxtr
+        if isinstance(self.door_fxtr, SingleCabinet):
+            self.target_obj_str = self.door_fxtr.name + "_door_handle_main"
+        elif isinstance(self.door_fxtr, Microwave):
+            self.target_obj_str = self.door_fxtr.name + "_door"
+        elif isinstance(self.door_fxtr, Drawer):
+            self.target_obj_str = self.door_fxtr.name + "_door_handle_main"
+        elif isinstance(self.door_fxtr, HingeCabinet):
+            self.target_obj_str = self.door_fxtr.name + "_left_door_handle_main/" + self.door_fxtr.name + "_right_door_handle_main"
+        self.target_place_str = None
 
     def get_ep_meta(self):
         """
@@ -138,42 +145,42 @@ class ManipulateDoor(Kitchen):
     def _get_more_obj_cfgs(self):
         cfgs = []
 
-        for i in range(1, self.add_object_num+1):
-            # distractors
-            cfgs.append(
-                dict(
-                    name=f"new_distr_{i}",
-                    obj_groups="all",
-                    type="object",
-                    # inside door
-                    microwavable=(True if isinstance(self.door_fxtr, Microwave) else None),
-                    placement=dict(
-                        fixture=self.door_fxtr,
-                        size=(0.30, 0.30),
-                        pos=(None, -1.0),
-                    ),
-                )
-            )
-
-        # for i in range(self.add_object_num + 1, self.add_object_num * 2 + 1):
+        # for i in range(1, self.add_object_num+1):
+        #     # distractors
         #     cfgs.append(
         #         dict(
         #             name=f"new_distr_{i}",
         #             obj_groups="all",
         #             type="object",
+        #             # inside door
+        #             microwavable=(True if isinstance(self.door_fxtr, Microwave) else None),
         #             placement=dict(
-        #                 fixture=self.get_fixture(
-        #                     FixtureType.COUNTER, ref=self.door_fxtr
-        #                 ),
-        #                 sample_region_kwargs=dict(
-        #                     ref=self.door_fxtr,
-        #                 ),
-        #                 size=(1.0, 0.50),
+        #                 fixture=self.door_fxtr,
+        #                 size=(0.30, 0.30),
         #                 pos=(None, -1.0),
-        #                 offset=(0.0, 0.10),
         #             ),
         #         )
         #     )
+
+        for i in range(1, self.add_object_num+1):
+            cfgs.append(
+                dict(
+                    name=f"new_distr_{i}",
+                    obj_groups="all",
+                    type="object",
+                    placement=dict(
+                        fixture=self.get_fixture(
+                            FixtureType.COUNTER, ref=self.door_fxtr
+                        ),
+                        sample_region_kwargs=dict(
+                            ref=self.door_fxtr,
+                        ),
+                        size=(1.0, 0.50),
+                        pos=(None, -1.0),
+                        offset=(0.0, 0.10),
+                    ),
+                )
+            )
 
         return cfgs
 
