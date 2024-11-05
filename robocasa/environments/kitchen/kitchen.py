@@ -944,6 +944,8 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
         self._cam_configs = deepcopy(CamUtils.CAM_CONFIGS)
         if self.randomize_cameras:
             self._randomize_cameras()
+        elif "cam_configs" in self._ep_meta:
+            self._cam_configs = self._ep_meta["cam_configs"]
 
         for (cam_name, cam_cfg) in self._cam_configs.items():
             if cam_cfg.get("parent_body", None) is not None:

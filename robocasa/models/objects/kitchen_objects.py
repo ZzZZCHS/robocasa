@@ -13,8 +13,8 @@ from robosuite.utils.mjcf_utils import find_elements, string_to_array
 
 import robocasa
 
-ALL_OBJ_INFOS = json.load(open('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/all_infos.json', 'r'))
-rank_info = torch.load('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/rank_info.pt', map_location='cpu')
+ALL_OBJ_INFOS = json.load(open('/ailab/user/huanghaifeng/work/robocasa_exps_haifeng/robocasa/all_infos.json', 'r'))
+rank_info = torch.load('/ailab/user/huanghaifeng/work/robocasa_exps_haifeng/robocasa/rank_info.pt', map_location='cpu')
 OBJ_NAME_LIST = rank_info['obj_name_list']
 ORI_RANK = rank_info['ori_rank']
 OBJ_SIM_MATRIX = rank_info['obj_sim_matrix']
