@@ -245,6 +245,7 @@ def sample_kitchen_object(
             )
             * scale
         )
+        print(f"bottom: {bottom}, top: {top}, horizontal_radius: {horizontal_radius}, scale: {scale}, obj_size: {obj_size}")
         valid_object_sampled = True
         for i in range(3):
             if max_size[i] is not None and obj_size[i] > max_size[i]:

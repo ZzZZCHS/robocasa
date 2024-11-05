@@ -1,4 +1,4 @@
-"""Visualize MJCF models.
+"""Demostrate obejcts to scale.
 """
 
 import argparse
@@ -6,17 +6,24 @@ import os
 import time
 import xml.etree.ElementTree as ET
 
-import cv2
 import mujoco
 import mujoco.viewer
 import numpy as np
 import robosuite
-from PIL import Image
 from robosuite.utils.binding_utils import MjRenderContextOffscreen, MjSim
 from robosuite.utils.mjcf_utils import array_to_string as a2s
 from robosuite.utils.mjcf_utils import find_elements
 from robosuite.utils.mjcf_utils import string_to_array as s2a
+from termcolor import colored
 
+import robocasa
+from robocasa.models.objects.kitchen_objects import sample_kitchen_object
+from robocasa.scripts.download_kitchen_assets import (
+    DOWNLOAD_ASSET_REGISTRY,
+    download_and_extract_zip,
+)
+
+from PIL import Image
 
 def edit_model_xml(xml_str):
     """
@@ -60,18 +67,13 @@ def edit_model_xml(xml_str):
 
 
 def read_model(
-    xml=None,
-    filepath=None,
+    filepath,
     hide_sites=True,
     show_bbox=False,
     show_coll_geoms=False,
 ):
-    # either xml string is provided directly or filename containing mjcf
-    assert (xml is not None) + (filepath is not None) == 1
-
-    if filepath is not None:
-        with open(filepath, "r") as file:
-            xml = file.read()
+    with open(filepath, "r") as file:
+        xml = file.read()
 
     xml = edit_model_xml(xml)
     root = ET.fromstring(xml)
@@ -169,31 +171,6 @@ def read_model(
     return sim, info
 
 
-def get_model_screenshot(
-    sim,
-    im_width=1024,
-    im_height=1024,
-    cam_settings=None,
-):
-    t = time.time()
-    render_context = MjRenderContextOffscreen(sim, device_id=-1)
-    render_context.vopt.geomgroup[0] = 0
-
-    # if cam_settings is None:
-    #     cam_settings = {}
-    # render_context.cam.distance = cam_settings.get("distance", 1.75)
-    # render_context.cam.elevation = cam_settings.get("elevation", -30)
-
-    sim.add_render_context(render_context)
-
-    print(info["sim_load_time"] + (time.time() - t))
-
-    image = sim.render(width=im_width, height=im_height)[::-1]
-
-
-    return image
-
-
 def render_model(
     sim,
     cam_settings=None,
@@ -201,64 +178,119 @@ def render_model(
     if cam_settings is None:
         cam_settings = {}
 
-    mujoco.viewer.launch(sim.model._model, sim.data._data)
+    # kill = False
+
+    # def key_callback(keycode):
+    #     if chr(keycode) == "q":
+    #         nonlocal kill
+    #         kill = not kill
+
+    # mujoco.viewer.launch(sim.model._model, sim.data._data)
+    viewer = mujoco.viewer.launch_passive(
+        sim.model._model,
+        sim.data._data,
+        key_callback=key_callback,
+        show_right_ui=False,
+    )
+
+    # viewer.cam.lookat = cam_settings["lookat"]
+    # viewer.cam.azimuth = cam_settings["azimuth"]
+    viewer.cam.distance = cam_settings["distance"]
+    viewer.cam.elevation = cam_settings["elevation"]
+
+    return viewer
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mjcf", type=str, required=True)
     parser.add_argument(
-        "--screenshot",
-        action="store_true",
-        help="save screenshot of model in same directory as filepath",
+        "--mjcf",
+        type=str,
+        help="(optional) path to specific model xml file to visualize. skip to sample random models",
     )
     parser.add_argument(
         "--show_bbox",
         action="store_true",
-        help="visualize exterior bounding box (based on ext_ sites)",
+        help="(optional) visualize exterior bounding box (based on ext_ sites)",
     )
     parser.add_argument(
         "--show_coll_geoms",
         action="store_true",
-        help="whether to hide collision geoms (group 0)",
+        help="(optional) whether to hide collision geoms (group 0)",
+    )
+    parser.add_argument(
+        "--obj_types",
+        type=str,
+        nargs="+",
+        default=["objaverse"],
+        help="(optional) object types. choose among [objaverse, aigen]",
     )
     args = parser.parse_args()
 
-    # cam_settings = {
-    #     "distance": 0.3,
-    #     "elevation": -30,
-    # }
+    cam_settings = {
+        "distance": 0.3,
+        "elevation": -30,
+    }
 
-    while True:
-        cam_settings = None
+    obj_registries = args.obj_types
+
+    if "aigen" in obj_registries:
+
+        aigen_objs_path = os.path.join(
+            robocasa.__path__[0], "models/assets/objects/aigen_objs"
+        )
+        if os.path.exists(aigen_objs_path) is False:
+            download_config = DOWNLOAD_ASSET_REGISTRY["aigen_objs"]
+            download_config[
+                "message"
+            ] = "Unable to find AI-generated objects locally. Downloading files."
+            download_config["prompt_before_download"] = True
+            download_and_extract_zip(**download_config)
+            print(
+                colored(
+                    f"Ending script. Rerun script to use new AI-generated objects",
+                    "yellow",
+                )
+            )
+            exit()
+
+    for i in range(1):
+        if args.mjcf is not None:
+            filepath = args.mjcf
+        else:
+            mjcf_kwargs, sampled_object_info = sample_kitchen_object(
+                groups="all",
+                obj_registries=obj_registries,
+            )
+            filepath = sampled_object_info["mjcf_path"]
+            cat = sampled_object_info["cat"].replace("_", " ")
+            aigen = "aigen_objs" in filepath
+            print()
+            print(colored(f"Category: {cat}", "green"))
+            print(colored(f"AI-Generated? {aigen}", "green"))
+            print(colored(f"Model path: {filepath}", "green"))
 
         sim, info = read_model(
-            xml=None,
-            filepath=args.mjcf,
+            filepath=filepath,
             hide_sites=False,
             show_bbox=args.show_bbox,
             show_coll_geoms=args.show_coll_geoms,
         )
-        print("sim load time:", info["sim_load_time"])
 
-        if args.screenshot:
-            image = get_model_screenshot(
-                sim=sim,
-                cam_settings=cam_settings,
-            )
-            im = Image.fromarray(image)
-            im.save("/ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/scripts/screenshot.png")
-            print("save screenshot png")
-            break
-        else:
-            render_model(
-                sim=sim,
-                cam_settings=cam_settings,
-            )
+        # viewer = render_model(
+        #     sim=sim,
+        #     cam_settings=cam_settings,
+        # )
 
-    # cv2.imshow('image', image[:,:,::-1])
-    # cv2.waitKey(0)
+        renderer = MjRenderContextOffscreen(sim, device_id=0)
+        print(sim)
+        renderer.render(640, 480)
+        image = renderer.read_pixels(640, 480, depth=False)
+        save_path="/ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/demos/test.png"
+        img = Image.fromarray(image, 'RGB')
+        img.save(save_path)
+        print(img)
 
+        time.sleep(0.5)  # add delay to prevent ghost windows from opening
 
-# python browse_mjcf_model.py --mjcf /ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/models/assets/objects/objaverse_extra/alcohol/alcohol_2/model.xml --screenshot
-# python browse_mjcf_model.py --mjcf /ssd/home/groups/smartbot/huanghaifeng/robocasa_exps/robocasa/robocasa/models/assets/objects/objaverse/alcohol/alcohol_2/model.xml --screenshot  
+        # breakpoint()

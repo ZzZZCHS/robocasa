@@ -496,7 +496,10 @@ class Kitchen(ManipulationEnv, metaclass=KitchenEnvMeta):
                     cfg['unique_attr'] = unique_attr
                 model, info = _create_obj(cfg)
                 if target_obj_name is None and cfg['name'] == 'obj':
-                    target_obj_name = info['mjcf_path'].split('/')[-2]
+                    # target_obj_name = info['mjcf_path'].split('/')[-2]
+                    target_obj_source = info['mjcf_path'].split('/')[-4]
+                    target_obj_id = info['mjcf_path'].split('/')[-2]
+                    target_obj_name = f"{target_obj_source}_{target_obj_id}"
                 cfg["info"] = info
                 self.objects[model.name] = model
                 self.model.merge_objects([model], extend=True)
