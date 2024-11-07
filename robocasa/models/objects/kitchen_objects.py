@@ -69,7 +69,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/apple"],
-            scale=0.6,
+            scale=0.4,
             exclude=[
                 "apple_34",
                 "apple_29",
@@ -133,7 +133,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/bagged_food"],
-            scale=2,
+            scale=2.0,
             exclude=[
                 "bagged_food_2"
             ]
@@ -156,7 +156,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/baguette"],
-            scale=2
+            scale=2.0
         ),
     ),
     banana=dict(
@@ -451,7 +451,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/candle"],
-            scale=1,
+            scale=1.0,
         )
     ),
     canned_food=dict(
@@ -488,7 +488,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/carrot"],
-            scale=1,
+            scale=1.0,
         )
     ),
     cereal=dict(
@@ -2130,7 +2130,7 @@ OBJ_CATEGORIES = dict(
         types=("fruit"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/watermelon"],
-            scale=2,
+            scale=2.0,
             exclude=["watermelon_1"]
         )
     ),
@@ -2899,7 +2899,7 @@ def sample_kitchen_object(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse",),
+    obj_registries=("objaverse", "objaverse_extra", "aigen"),
     split=None,
     max_size=(None, None, None),
     object_scale=None,
@@ -2989,8 +2989,9 @@ def sample_kitchen_object(
         valid_object_sampled = True
         for i in range(3):
             if max_size[i] is not None and obj_size[i] > max_size[i]:
-                valid_object_sampled = False
+                valid_object_sampled = False    
 
+    print(info)
     return mjcf_kwargs, info
 
 
@@ -3003,7 +3004,7 @@ def sample_kitchen_object_helper(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse",),
+    obj_registries=("objaverse", "objaverse_extra", "aigen"),
     split=None,
     object_scale=None,
     cfg=None
@@ -3144,12 +3145,15 @@ def sample_kitchen_object_helper(
             target_obj_name = cfg['target_obj_name']
             unique_attr = cfg['unique_attr']
             for reg in obj_registries:
+                # breakpoint()
                 if reg not in OBJ_CATEGORIES[cat]:
                     choices[reg] = []
                     continue
                 tmp_choices = []
-                for cat in valid_categories:
-                    reg_choices = deepcopy(OBJ_CATEGORIES[cat][reg].mjcf_paths)
+                for cate in valid_categories:
+                    if reg not in OBJ_CATEGORIES[cate]:
+                        continue
+                    reg_choices = deepcopy(OBJ_CATEGORIES[cate][reg].mjcf_paths)
                     if split is not None:
                         split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 2)))
                         if split == "A":
@@ -3201,6 +3205,7 @@ def sample_kitchen_object_helper(
                 tmp_sum_rank = tmp_rank.sum(dim=-1)
                 tmp_rank_idx = tmp_sum_rank.argsort(dim=-1)
                 tmp_choices = [OBJ_NAME_LIST[valid_obj_idx_list[x]] for x in tmp_rank_idx[:30]]
+                print(f"{reg}: {len(valid_obj_idx_list)}")
                 choices[reg] = list(map(lambda x: choice_map[x], tmp_choices))
                 # ct = defaultdict(int)
                 # for attr in attr_list:
