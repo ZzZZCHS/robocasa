@@ -2815,6 +2815,7 @@ class ObjCat:
         self.solimp = solimp
         self.solref = solref
         self.density = density
+        friction = (1, 1, 1) # !!!
         self.friction = friction
         self.priority = priority
         self.exclude = exclude or []
@@ -3003,7 +3004,7 @@ def sample_kitchen_object_helper(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse",),
+    obj_registries=("objaverse", "objaverse_extra", "aigen_objs"),
     split=None,
     object_scale=None,
     cfg=None
