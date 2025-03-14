@@ -51,7 +51,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/alcohol"],
-            scale=1.0
+            scale=1.35
         )
     ),
     apple=dict(
@@ -69,7 +69,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/apple"],
-            scale=0.4,
+            scale=0.9,
             exclude=[
                 "apple_34",
                 "apple_29",
@@ -133,7 +133,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/bagged_food"],
-            scale=2.0,
+            scale=1.0,
             exclude=[
                 "bagged_food_2"
             ]
@@ -156,7 +156,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/baguette"],
-            scale=2.0
+            scale=1.0
         ),
     ),
     banana=dict(
@@ -222,7 +222,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(scale=1.15),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/beer"],
-            scale=1.0,
+            scale=1.15,
             exclude=["beer_1"]
         )
     ),
@@ -299,7 +299,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/bowl"],
-            scale=1.3,
+            scale=2.0,
             exclude=["bowl_53", "bowl_24", "bowl_15"]
         )
     ),
@@ -323,7 +323,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/boxed_drink"],
-            scale=1.0,
+            scale=0.8,
             exclude=["boxed_drink_8"]
         )
     ),
@@ -386,7 +386,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/broccoli"],
-            scale=0.6,
+            scale=1.25,
         )
     ),
     cake=dict(
@@ -407,7 +407,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/cake"],
-            scale=1.2,
+            scale=0.8,
             exclude=["cake_20"]
         )
     ),
@@ -526,7 +526,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/cheese"],
-            scale=0.6,
+            scale=0.8,
         )
     ),
     chips=dict(
@@ -547,7 +547,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/chips"],
-            scale=1.5,
+            scale=1.0,
         )
     ),
     chocolate=dict(
@@ -568,7 +568,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/chocolate"],
-            scale=0.7,
+            scale=1.0,
         )
     ),
     coffee_cup=dict(
@@ -590,7 +590,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/coffee_cup"],
-            scale=0.8,
+            scale=1.0,
             exclude=["coffee_cup_44"]
         )
     ),
@@ -724,7 +724,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/cutting_board"],
-            scale=2.0,
+            scale=1.35,
         )
     ),
     donut=dict(
@@ -742,7 +742,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/donut"],
-            scale=0.9,
+            scale=1.15,
             exclude=["donut_19", "donut_21", "donut_33", "donut_34", "donut_35", "donut_5"]
         )
     ),
@@ -761,7 +761,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/egg"],
-            scale=0.7,
+            scale=0.85,
         )
     ),
     eggplant=dict(
@@ -876,7 +876,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/jug"],
-            scale=1.0,
+            scale=1.5,
         )
     ),
     ketchup=dict(
@@ -958,7 +958,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/kiwi"],
-            scale=0.8,
+            scale=0.9,
         )
     ),
     knife=dict(
@@ -1010,7 +1010,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/lemon"],
-            scale=0.8,
+            scale=1.0,
         )
     ),
     lime=dict(
@@ -1028,7 +1028,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/lime"],
-            scale=0.8,
+            scale=0.9,
         )
     ),
     mango=dict(
@@ -1107,7 +1107,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/mushroom"],
-            scale=0.8,
+            scale=1.0,
             exclude=[
                 "mushroom_2"
             ]
@@ -1211,7 +1211,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/peach"],
-            scale=0.8,
+            scale=1.0,
         )
     ),
     pear=dict(
@@ -1229,7 +1229,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/pear"],
-            scale=0.8,
+            scale=1.0,
         )
     ),
     plate=dict(
@@ -1250,7 +1250,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/plate"],
-            scale=1.0,
+            scale=1.35,
             exclude=["plate_12", "plate_14", "plate_18"]
         )
     ),
@@ -1267,7 +1267,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/potato"],
-            scale=0.7,
+            scale=1.0,
         )
     ),
     rolling_pin=dict(
@@ -1289,7 +1289,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/rolling_pin"],
-            scale=2.0,
+            scale=1.35,
         )
     ),
     scissors=dict(
@@ -1307,7 +1307,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/scissors"],
-            scale=1.0,
+            scale=1.15,
         )
     ),
     shaker=dict(
@@ -1357,7 +1357,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/spatula"],
-            scale=1.0,
+            scale=1.1,
         )
     ),
     sponge=dict(
@@ -1378,7 +1378,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/sponge"],
-            scale=0.8,
+            scale=1.2,
         )
     ),
     spoon=dict(
@@ -1412,7 +1412,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/spray"],
-            scale=1.0,
+            scale=1.75,
         )
     ),
     squash=dict(
@@ -1432,7 +1432,7 @@ OBJ_CATEGORIES = dict(
         ),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/squash"],
-            scale=1.0,
+            scale=1.15,
         )
     ),
     steak=dict(
@@ -1479,7 +1479,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/tangerine"],
-            scale=0.8,
+            scale=1.0,
         )
     ),
     teapot=dict(
@@ -1516,7 +1516,7 @@ OBJ_CATEGORIES = dict(
         objaverse=dict(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/tomato"],
-            scale=0.8,
+            scale=1.0,
         )
     ),
     tray=dict(
@@ -1639,7 +1639,7 @@ OBJ_CATEGORIES = dict(
         types=(),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/walnut"],
-            scale=0.5,
+            scale=1.15,
         )
     ),
     cheese_grater=dict(
@@ -1685,7 +1685,7 @@ OBJ_CATEGORIES = dict(
         types=("sweets"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/candy"],
-            scale=0.7,
+            scale=1.0,
         )
     ),
     whisk=dict(
@@ -1839,7 +1839,7 @@ OBJ_CATEGORIES = dict(
         types=("receptacle"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/ice_cube_tray"],
-            scale=1.5,
+            scale=2.0,
         )
     ),
     shrimp=dict(
@@ -1865,7 +1865,7 @@ OBJ_CATEGORIES = dict(
         types=("fruit"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/cantaloupe"],
-            scale=1.0,
+            scale=1.5,
         )
     ),
     honey_bottle=dict(
@@ -2049,7 +2049,7 @@ OBJ_CATEGORIES = dict(
         types=("receptacle"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/wine_glass"],
-            scale=1.0,
+            scale=1.5,
         )
     ),
     asparagus=dict(
@@ -2130,7 +2130,7 @@ OBJ_CATEGORIES = dict(
         types=("fruit"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/watermelon"],
-            scale=2.0,
+            scale=2.5,
             exclude=["watermelon_1"]
         )
     ),
@@ -2240,7 +2240,7 @@ OBJ_CATEGORIES = dict(
         types=("cooked_food"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/hamburger"],
-            scale=1.0,
+            scale=1.35,
         )
     ),
     raspberry=dict(
@@ -2308,7 +2308,7 @@ OBJ_CATEGORIES = dict(
         types=("meat"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/pork_chop"],
-            scale=1.0,
+            scale=1.25,
         )
     ),
     sausage=dict(
@@ -2334,7 +2334,7 @@ OBJ_CATEGORIES = dict(
         types=("fruit"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/coconut"],
-            scale=1.0,
+            scale=2.0,
         )
     ),
     cauliflower=dict(
@@ -2349,7 +2349,7 @@ OBJ_CATEGORIES = dict(
         types=("vegetable"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/cauliflower"],
-            scale=1.0,
+            scale=1.5,
         )
     ),
     lollipop=dict(
@@ -2415,7 +2415,7 @@ OBJ_CATEGORIES = dict(
         types=("fruit"),
         objaverse_extra=dict(
             model_folders=["objaverse_extra/pineapple"],
-            scale=1.5,
+            scale=2.0,
         )
     ),
     skewers=dict(
@@ -2429,222 +2429,222 @@ OBJ_CATEGORIES = dict(
         freezable=False,
         types=("meat", "cooked_food"),
     ),
-    barrel=dict(
-        types=("receptable"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/barrel"],
-            scale=2.0
-        )
-    ),
-    bottle=dict(
-        types=("drink"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/bottle"],
-            scale=1.0
-        ),
-    ),
-    coaster=dict(
-        types=("decoration"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/coaster"],
-            scale=1.0
-        ),
-    ),
-    coffee_machine=dict(
-        types=("tool"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/coffee_machine"],
-            scale=1.2
-        ),
-    ),
-    cookie=dict(
-        types=("food"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/cookie"],
-            scale=0.7
-        ),
-    ),
-    dessert=dict(
-        types=("food"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/dessert"],
-            scale=1.0
-        ),
-    ),
-    fruit=dict(
-        types=("food"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/fruit"],
-            scale=1.0
-        ),
-    ),
-    gadgett=dict(
-        types=("tool"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/gadget"],
-            scale=1.0
-        ),
-    ),
-    glass=dict(
-        types=("receptable"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/glass"],
-            scale=1.0
-        ),
-    ),
-    jar=dict(
-        types=("receptable"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/jar"],
-            scale=1.0
-        ),
-    ),
-    melon=dict(
-        types=("food"),
-        graspable=True,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/melon"],
-            scale=1.2
-        ),
-    ),
-    peanut=dict(
-        types=("food"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/peanut"],
-            scale=0.5
-        ),
-    ),
-    pumpkin=dict(
-        types=("food"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/pumpkin"],
-            scale=1.2
-        ),
-    ),
-    sandwich=dict(
-        types=("food"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=True,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/sandwich"],
-            scale=1.0
-        ),
-    ),
-    tissue_box=dict(
-        types=("food"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/tissue_box"],
-            scale=1.8
-        ),
-    ),
-    toaster=dict(
-        types=("tool"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/toaster"],
-            scale=1.8
-        ),
-    ),
-    utensil=dict(
-        types=("tool"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/utensil"],
-            scale=1.0
-        ),
-    ),
-    vase=dict(
-        types=("decoration"),
-        graspable=False,
-        washable=False,
-        microwavable=False,
-        cookable=False,
-        freezable=False,
-        objaverse_extra=dict(
-            model_folders=["objaverse_extra/vase"],
-            scale=1.0
-        ),
-    ),
+    # barrel=dict(
+    #     types=("receptable"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=False,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/barrel"],
+    #         scale=2.0
+    #     )
+    # ),
+    # bottle=dict(
+    #     types=("drink"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/bottle"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # coaster=dict(
+    #     types=("decoration"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/coaster"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # coffee_machine=dict(
+    #     types=("tool"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/coffee_machine"],
+    #         scale=1.2
+    #     ),
+    # ),
+    # cookie=dict(
+    #     types=("food"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/cookie"],
+    #         scale=0.7
+    #     ),
+    # ),
+    # dessert=dict(
+    #     types=("food"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/dessert"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # fruit=dict(
+    #     types=("food"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/fruit"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # gadgett=dict(
+    #     types=("tool"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/gadget"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # glass=dict(
+    #     types=("receptable"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/glass"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # jar=dict(
+    #     types=("receptable"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/jar"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # melon=dict(
+    #     types=("food"),
+    #     graspable=True,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/melon"],
+    #         scale=1.2
+    #     ),
+    # ),
+    # peanut=dict(
+    #     types=("food"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/peanut"],
+    #         scale=0.5
+    #     ),
+    # ),
+    # pumpkin=dict(
+    #     types=("food"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/pumpkin"],
+    #         scale=1.2
+    #     ),
+    # ),
+    # sandwich=dict(
+    #     types=("food"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=True,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/sandwich"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # tissue_box=dict(
+    #     types=("food"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=False,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/tissue_box"],
+    #         scale=1.8
+    #     ),
+    # ),
+    # toaster=dict(
+    #     types=("tool"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=False,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/toaster"],
+    #         scale=1.8
+    #     ),
+    # ),
+    # utensil=dict(
+    #     types=("tool"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=False,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/utensil"],
+    #         scale=1.0
+    #     ),
+    # ),
+    # vase=dict(
+    #     types=("decoration"),
+    #     graspable=False,
+    #     washable=False,
+    #     microwavable=False,
+    #     cookable=False,
+    #     freezable=False,
+    #     objaverse_extra=dict(
+    #         model_folders=["objaverse_extra/vase"],
+    #         scale=1.0
+    #     ),
+    # ),
 )
 
 
@@ -2899,7 +2899,7 @@ def sample_kitchen_object(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse", "objaverse_extra", "aigen"),
+    obj_registries=("objaverse_extra"),
     split=None,
     max_size=(None, None, None),
     object_scale=None,
@@ -3004,7 +3004,7 @@ def sample_kitchen_object_helper(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse", "objaverse_extra", "aigen"),
+    obj_registries=("objaverse_extra"),
     split=None,
     object_scale=None,
     cfg=None
