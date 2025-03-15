@@ -162,7 +162,7 @@ def sample_kitchen_object(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse_extra"),
+    obj_registries=("objaverse", "objaverse_extra", "aigen"),
     split=None,
     max_size=(None, None, None),
     object_scale=None,
@@ -263,7 +263,7 @@ def sample_kitchen_object_helper(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse_extra"),
+    obj_registries=("objaverse", "objaverse_extra", "aigen"),
     split=None,
     object_scale=None,
 ):

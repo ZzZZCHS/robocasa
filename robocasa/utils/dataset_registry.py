@@ -6,7 +6,7 @@ from pathlib import Path
 import robocasa
 import robocasa.macros as macros
 
-data_version = "generated_1105"
+data_version = "generated_data"
 raw_data_version = "raw_data"
 
 SINGLE_STAGE_TASK_DATASETS = OrderedDict(

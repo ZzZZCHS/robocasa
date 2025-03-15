@@ -2815,6 +2815,8 @@ class ObjCat:
         self.solimp = solimp
         self.solref = solref
         self.density = density
+        # friction = (100, 100, 100) # !!!
+        # friction[0] = 100
         self.friction = friction
         self.priority = priority
         self.exclude = exclude or []
@@ -2899,7 +2901,7 @@ def sample_kitchen_object(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse_extra"),
+    obj_registries=("objaverse", "objaverse_extra", "aigen"),
     split=None,
     max_size=(None, None, None),
     object_scale=None,
@@ -2991,7 +2993,7 @@ def sample_kitchen_object(
             if max_size[i] is not None and obj_size[i] > max_size[i]:
                 valid_object_sampled = False    
 
-    print(info)
+    # print(info)
     return mjcf_kwargs, info
 
 
@@ -3004,7 +3006,7 @@ def sample_kitchen_object_helper(
     cookable=None,
     freezable=None,
     rng=None,
-    obj_registries=("objaverse_extra"),
+    obj_registries=("objaverse", "objaverse_extra", "aigen"),
     split=None,
     object_scale=None,
     cfg=None
@@ -3044,12 +3046,15 @@ def sample_kitchen_object_helper(
         dict: info about the sampled object - the path of the mjcf, groups which the object's category belongs to, the category of the object
               the sampling split the object came from, and the groups the object was sampled from
     """
+    obj_registries=("objaverse",)   # !!!!
     if cfg and cfg.get('info', None):
         ori_info = cfg['info']
         cat = ori_info['cat']
         mjcf_path = ori_info['mjcf_path']
         mjcf_path = os.path.join(BASE_ASSET_ZOO_PATH, '/'.join(mjcf_path.split('/')[-4:]))
         chosen_reg = mjcf_path.split('/')[-4]
+        if chosen_reg == "aigen_objs":
+            chosen_reg = "aigen"
         mjcf_kwargs = OBJ_CATEGORIES[cat][chosen_reg].get_mjcf_kwargs()
         mjcf_kwargs['mjcf_path'] = mjcf_path
         ori_info['mjcf_path'] = mjcf_path
@@ -3140,7 +3145,7 @@ def sample_kitchen_object_helper(
         
         choices = {reg: [] for reg in obj_registries}
         
-
+        # !!!
         if cfg and cfg.get('target_obj_name', None) and "distr" in cfg["name"]:
             target_obj_name = cfg['target_obj_name']
             unique_attr = cfg['unique_attr']
@@ -3205,7 +3210,7 @@ def sample_kitchen_object_helper(
                 tmp_sum_rank = tmp_rank.sum(dim=-1)
                 tmp_rank_idx = tmp_sum_rank.argsort(dim=-1)
                 tmp_choices = [OBJ_NAME_LIST[valid_obj_idx_list[x]] for x in tmp_rank_idx[:30]]
-                print(f"{reg}: {len(valid_obj_idx_list)}")
+                # print(f"{reg}: {len(valid_obj_idx_list)}")
                 choices[reg] = list(map(lambda x: choice_map[x], tmp_choices))
                 # ct = defaultdict(int)
                 # for attr in attr_list:

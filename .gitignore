@@ -121,8 +121,8 @@ robocasa/models/assets/demonstrations_private
 datasets
 
 # object assets
-robocasa/models/assets/objects/objaverse
-robocasa/models/assets/objects/aigen_objs
+robocasa/models/assets/objects
+robocasa/models/assets/old_objects
 
 # fixture assets
 robocasa/models/assets/fixtures/**/*.glb
