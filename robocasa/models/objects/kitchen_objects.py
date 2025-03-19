@@ -2430,7 +2430,7 @@ OBJ_CATEGORIES = dict(
         types=("meat", "cooked_food"),
     ),
     barrel=dict(
-        types=("receptable"),
+        types=(),
         graspable=False,
         washable=False,
         microwavable=False,
@@ -2441,7 +2441,7 @@ OBJ_CATEGORIES = dict(
             scale=1.0
         )
     ),
-    barrel=dict(
+    basket=dict(
         types=("receptable"),
         graspable=False,
         washable=False,
@@ -2462,7 +2462,7 @@ OBJ_CATEGORIES = dict(
         freezable=True,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/bottle"],
-            scale=1.0
+            scale=0.7
         ),
     ),
     # coaster=dict(
@@ -2498,7 +2498,7 @@ OBJ_CATEGORIES = dict(
         freezable=True,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/cookie"],
-            scale=0.5
+            scale=0.3
         ),
     ),
     dessert=dict(
@@ -2510,10 +2510,10 @@ OBJ_CATEGORIES = dict(
         freezable=True,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/dessert"],
-            scale=0.7
+            scale=0.6
         ),
     ),
-    dessert=dict(
+    dish=dict(
         types=("food"),
         graspable=True,
         washable=False,
@@ -2537,7 +2537,7 @@ OBJ_CATEGORIES = dict(
             scale=0.7
         ),
     ),
-    gadgett=dict(
+    gadget=dict(
         types=("tool"),
         graspable=True,
         washable=False,
@@ -2618,7 +2618,7 @@ OBJ_CATEGORIES = dict(
         freezable=True,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/pumpkin"],
-            scale=1.0
+            scale=0.8
         ),
     ),
     sandwich=dict(
@@ -2642,7 +2642,7 @@ OBJ_CATEGORIES = dict(
         freezable=False,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/tissue_box"],
-            scale=1.8
+            scale=1.0
         ),
     ),
     toaster=dict(
@@ -2654,7 +2654,7 @@ OBJ_CATEGORIES = dict(
         freezable=False,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/toaster"],
-            scale=1.8
+            scale=1.4
         ),
     ),
     utensil=dict(
