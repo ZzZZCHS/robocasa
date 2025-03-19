@@ -2429,30 +2429,42 @@ OBJ_CATEGORIES = dict(
         freezable=False,
         types=("meat", "cooked_food"),
     ),
-    # barrel=dict(
-    #     types=("receptable"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=False,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/barrel"],
-    #         scale=2.0
-    #     )
-    # ),
-    # bottle=dict(
-    #     types=("drink"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/bottle"],
-    #         scale=1.0
-    #     ),
-    # ),
+    barrel=dict(
+        types=("receptable"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/barrel"],
+            scale=1.0
+        )
+    ),
+    barrel=dict(
+        types=("receptable"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/basket"],
+            scale=1.3
+        )
+    ),
+    bottle=dict(
+        types=("drink"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/bottle"],
+            scale=1.0
+        ),
+    ),
     # coaster=dict(
     #     types=("decoration"),
     #     graspable=True,
@@ -2465,186 +2477,210 @@ OBJ_CATEGORIES = dict(
     #         scale=1.0
     #     ),
     # ),
-    # coffee_machine=dict(
-    #     types=("tool"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/coffee_machine"],
-    #         scale=1.2
-    #     ),
-    # ),
-    # cookie=dict(
-    #     types=("food"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/cookie"],
-    #         scale=0.7
-    #     ),
-    # ),
-    # dessert=dict(
-    #     types=("food"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/dessert"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # fruit=dict(
-    #     types=("food"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/fruit"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # gadgett=dict(
-    #     types=("tool"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/gadget"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # glass=dict(
-    #     types=("receptable"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/glass"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # jar=dict(
-    #     types=("receptable"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/jar"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # melon=dict(
-    #     types=("food"),
-    #     graspable=True,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/melon"],
-    #         scale=1.2
-    #     ),
-    # ),
-    # peanut=dict(
-    #     types=("food"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/peanut"],
-    #         scale=0.5
-    #     ),
-    # ),
-    # pumpkin=dict(
-    #     types=("food"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/pumpkin"],
-    #         scale=1.2
-    #     ),
-    # ),
-    # sandwich=dict(
-    #     types=("food"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=True,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/sandwich"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # tissue_box=dict(
-    #     types=("food"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=False,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/tissue_box"],
-    #         scale=1.8
-    #     ),
-    # ),
-    # toaster=dict(
-    #     types=("tool"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=False,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/toaster"],
-    #         scale=1.8
-    #     ),
-    # ),
-    # utensil=dict(
-    #     types=("tool"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=False,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/utensil"],
-    #         scale=1.0
-    #     ),
-    # ),
-    # vase=dict(
-    #     types=("decoration"),
-    #     graspable=False,
-    #     washable=False,
-    #     microwavable=False,
-    #     cookable=False,
-    #     freezable=False,
-    #     objaverse_extra=dict(
-    #         model_folders=["objaverse_extra/vase"],
-    #         scale=1.0
-    #     ),
-    # ),
+    coffee_machine=dict(
+        types=("tool"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/coffee_machine"],
+            scale=1.2
+        ),
+    ),
+    cookie=dict(
+        types=("food"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/cookie"],
+            scale=0.5
+        ),
+    ),
+    dessert=dict(
+        types=("food"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/dessert"],
+            scale=0.7
+        ),
+    ),
+    dessert=dict(
+        types=("food"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/dish"],
+            scale=0.7
+        ),
+    ),
+    fruit=dict(
+        types=("food"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/fruit"],
+            scale=0.7
+        ),
+    ),
+    gadgett=dict(
+        types=("tool"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/gadget"],
+            scale=0.8
+        ),
+    ),
+    glass=dict(
+        types=("receptable"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/glass"],
+            scale=0.7
+        ),
+    ),
+    jar=dict(
+        types=("receptable"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/jar"],
+            scale=0.6
+        ),
+    ),
+    melon=dict(
+        types=("food"),
+        graspable=True,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/melon"],
+            scale=1.0
+        ),
+    ),
+    peanut=dict(
+        types=("food"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/peanut"],
+            scale=0.2
+        ),
+    ),
+    pizza=dict(
+        types=("food"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/pizza"],
+            scale=1.2
+        ),
+    ),
+    pumpkin=dict(
+        types=("food"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/pumpkin"],
+            scale=1.0
+        ),
+    ),
+    sandwich=dict(
+        types=("food"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=True,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/sandwich"],
+            scale=0.8
+        ),
+    ),
+    tissue_box=dict(
+        types=("tool"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/tissue_box"],
+            scale=1.8
+        ),
+    ),
+    toaster=dict(
+        types=("tool"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/toaster"],
+            scale=1.8
+        ),
+    ),
+    utensil=dict(
+        types=("tool"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/utensil"],
+            scale=0.8
+        ),
+    ),
+    vase=dict(
+        types=("decoration"),
+        graspable=False,
+        washable=False,
+        microwavable=False,
+        cookable=False,
+        freezable=False,
+        objaverse_extra=dict(
+            model_folders=["objaverse_extra/vase"],
+            scale=1.0
+        ),
+    ),
 )
 
 
