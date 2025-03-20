@@ -2478,12 +2478,12 @@ OBJ_CATEGORIES = dict(
     #     ),
     # ),
     coffee_machine=dict(
-        types=("tool"),
+        types=(),
         graspable=False,
         washable=False,
         microwavable=False,
         cookable=False,
-        freezable=True,
+        freezable=False,
         objaverse_extra=dict(
             model_folders=["objaverse_extra/coffee_machine"],
             scale=1.2
@@ -2646,7 +2646,7 @@ OBJ_CATEGORIES = dict(
         ),
     ),
     toaster=dict(
-        types=("tool"),
+        types=(),
         graspable=False,
         washable=False,
         microwavable=False,
@@ -2659,7 +2659,7 @@ OBJ_CATEGORIES = dict(
     ),
     utensil=dict(
         types=("tool"),
-        graspable=False,
+        graspable=True,
         washable=False,
         microwavable=False,
         cookable=False,
