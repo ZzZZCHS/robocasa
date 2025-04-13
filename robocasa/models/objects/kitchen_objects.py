@@ -13,8 +13,8 @@ from robosuite.utils.mjcf_utils import find_elements, string_to_array
 
 import robocasa
 
-ALL_OBJ_INFOS = json.load(open('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/all_infos.json', 'r'))
-rank_info = torch.load('/ailab/user/huanghaifeng/work/robocasa_exps/robocasa/rank_info.pt', map_location='cpu')
+ALL_OBJ_INFOS = json.load(open('/ailab/group/pjlab-smartbot/chenxinyi/haifeng/robocasa_exps/robocasa/all_infos.json', 'r'))
+rank_info = torch.load('/ailab/group/pjlab-smartbot/chenxinyi/haifeng/robocasa_exps/robocasa/rank_info.pt', map_location='cpu')
 OBJ_NAME_LIST = rank_info['obj_name_list']
 ORI_RANK = rank_info['ori_rank']
 OBJ_SIM_MATRIX = rank_info['obj_sim_matrix']
@@ -3082,7 +3082,7 @@ def sample_kitchen_object_helper(
         dict: info about the sampled object - the path of the mjcf, groups which the object's category belongs to, the category of the object
               the sampling split the object came from, and the groups the object was sampled from
     """
-    obj_registries=("objaverse",)   # !!!!
+    # obj_registries=("objaverse",)   # !!!!
     if cfg and cfg.get('info', None):
         ori_info = cfg['info']
         cat = ori_info['cat']
@@ -3196,7 +3196,7 @@ def sample_kitchen_object_helper(
                         continue
                     reg_choices = deepcopy(OBJ_CATEGORIES[cate][reg].mjcf_paths)
                     if split is not None:
-                        split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 2)))
+                        split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 4 * 3)))
                         if split == "A":
                             reg_choices = reg_choices[:split_th]
                         elif split == "B":
@@ -3267,7 +3267,7 @@ def sample_kitchen_object_helper(
                     continue
                 reg_choices = deepcopy(OBJ_CATEGORIES[cat][reg].mjcf_paths)
                 if split is not None:
-                    split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 2)))
+                    split_th = max(len(choices) - 3, int(math.ceil(len(reg_choices) / 4 * 3)))
                     if split == "A":
                         reg_choices = reg_choices[:split_th]
                     elif split == "B":
